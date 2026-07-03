@@ -2264,6 +2264,37 @@ clean PR, opened for you</span></div>
             <li>Claude Code (Claude Code panel)</li>
             <li>GitHub CLI with auth (used for no-mistakes init)</li>
           </ul>
+
+          <p style="margin-top:1.25rem">Firstmate also installs four companion tools on first launch. Each is part of the <a href="https://axi.md" target="_blank">AXI ecosystem</a> — token-efficient agent interfaces designed to reduce cost and improve reliability over raw CLIs or MCP servers.</p>
+
+          <table style="width:100%;border-collapse:collapse;font-size:0.92rem;margin-top:0.75rem">
+            <thead>
+              <tr style="border-bottom:1px solid var(--border)">
+                <th style="text-align:left;padding:0.5rem 0.75rem;font-weight:600;color:var(--subtle)">Tool</th>
+                <th style="text-align:left;padding:0.5rem 0.75rem;font-weight:600;color:var(--subtle)">What it does</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom:1px solid var(--border)">
+                <td style="padding:0.6rem 0.75rem"><a href="https://github.com/kunchenguid/treehouse" target="_blank"><strong>treehouse</strong></a></td>
+                <td style="padding:0.6rem 0.75rem">Manages a pool of reusable, isolated git worktrees. Each crewmate gets its own clean environment instantly with dependencies and build cache intact — no re-cloning between tasks</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border)">
+                <td style="padding:0.6rem 0.75rem"><a href="https://github.com/kunchenguid/gh-axi" target="_blank"><strong>gh-axi</strong></a></td>
+                <td style="padding:0.6rem 0.75rem">GitHub CLI wrapper optimized for agents — token-efficient TOON output, contextual next-step hints, and structured errors. 100% task success vs 86% for raw <code>gh</code>, at lower cost</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border)">
+                <td style="padding:0.6rem 0.75rem"><a href="https://github.com/kunchenguid/tasks-axi" target="_blank"><strong>tasks-axi</strong></a></td>
+                <td style="padding:0.6rem 0.75rem">Task and backlog manager for agents. Edits a human-readable <code>backlog.md</code> in place at near-zero output-token cost — no markdown regeneration through the model</td>
+              </tr>
+              <tr>
+                <td style="padding:0.6rem 0.75rem"><a href="https://github.com/kunchenguid/chrome-devtools-axi" target="_blank"><strong>chrome-devtools-axi</strong></a></td>
+                <td style="padding:0.6rem 0.75rem">Browser automation for agents. Wraps chrome-devtools-mcp with AXI output — 57% fewer input tokens and 26% lower cost vs raw MCP. Agents load it automatically when a task needs a real browser</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p style="margin-top:1rem">When you first launch firstmate and it detects these are missing, select <strong>Install all (Recommended)</strong> to install the full toolchain in one step.</p>
         </div>
       </div>
 
