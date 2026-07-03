@@ -2175,7 +2175,7 @@ Command path: /Users/you/.local/bin/no-mistakes -> /Users/you/.no-mistakes/bin/n
               </tr>
               <tr style="border-bottom:1px solid var(--border)">
                 <td style="padding:0.6rem 0.75rem"><code>no-mistakes</code></td>
-                <td style="padding:0.6rem 0.75rem">Opens the TUI wizard - commits, pushes through gate, shows findings. Add <code>-y</code> to skip prompts</td>
+                <td style="padding:0.6rem 0.75rem">Opens the TUI wizard - confirms branch, commit, then push. Add <code>-y</code> to skip all prompts</td>
               </tr>
               <tr>
                 <td style="padding:0.6rem 0.75rem"><code>/no-mistakes &lt;task&gt;</code></td>
@@ -2183,6 +2183,24 @@ Command path: /Users/you/.local/bin/no-mistakes -> /Users/you/.no-mistakes/bin/n
               </tr>
             </tbody>
           </table>
+
+          <p style="margin-top:1.25rem">When the TUI appears, it shows the current branch and commit state, then asks to confirm the push. Use these keys:</p>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">TUI</span>
+            </div>
+            <div class="term-body"><span class="cmt">┌ Setup ──────────────────────────────────────┐
+- Branch   already on deploy_engine_optimize_code
+- Commit   no uncommitted changes
+❙ Push     push branch to no-mistakes gate?
+└─────────────────────────────────────────────┘</span>
+
+<span class="kw">y</span> <span class="cmd">push</span>   <span class="cmt">confirm — start the pipeline</span>
+<span class="kw">n</span> <span class="cmd">skip</span>   <span class="cmt">cancel this step, continue setup</span>
+<span class="kw">q</span> <span class="cmd">quit</span>   <span class="cmt">exit the TUI entirely</span></div>
+          </div>
+          <p style="margin-top:0.75rem">Press <strong>y</strong> to push through the gate and start the review pipeline.</p>
         </div>
       </div>
 
