@@ -2097,20 +2097,26 @@ Only skip lavish if Manjesh explicitly asks for a Markdown file or says
         <div class="step-body">
           <h3>Install no-mistakes</h3>
           <p>One-line installer. Puts the binary at <code>~/.local/bin/no-mistakes</code> and symlinks it from <code>~/.no-mistakes/bin/</code>.</p>
-          <div class="term-block">
-            <div class="term-header">
-              <span class="term-title">Install</span>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">zsh</span>
               <button class="term-copy" data-copy="curl -fsSL https://raw.githubusercontent.com/kunchenguid/no-mistakes/main/docs/install.sh | sh">Copy</button>
             </div>
-            <pre class="term-body">curl -fsSL https://raw.githubusercontent.com/kunchenguid/no-mistakes/main/docs/install.sh | sh</pre>
+            <div class="term-body"><span class="prompt">➜</span> <span class="cmd">curl -fsSL https://raw.githubusercontent.com/kunchenguid/no-mistakes/main/docs/install.sh | sh</span>
+<span class="out">Downloading no-mistakes v1.31.2 for darwin/arm64...
+no-mistakes v1.31.2 installed to /Users/you/.no-mistakes/bin/no-mistakes
+Command path: /Users/you/.local/bin/no-mistakes -> /Users/you/.no-mistakes/bin/no-mistakes</span></div>
           </div>
-          <p>Verify:</p>
-          <div class="term-block">
-            <div class="term-header">
-              <span class="term-title">Verify</span>
+          <p style="margin-top:1rem">Verify the install:</p>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">zsh</span>
               <button class="term-copy" data-copy="no-mistakes --version">Copy</button>
             </div>
-            <pre class="term-body">no-mistakes --version</pre>
+            <div class="term-body"><span class="prompt">➜</span> <span class="cmd">no-mistakes --version</span>
+<span class="out">no-mistakes version v1.31.2</span></div>
           </div>
         </div>
       </div>
@@ -2120,21 +2126,32 @@ Only skip lavish if Manjesh explicitly asks for a Markdown file or says
         <div class="step-index">02</div>
         <div class="step-body">
           <h3>Initialize a repo (per project)</h3>
-          <p>Run this once per repo you want to gate. It adds a <code>no-mistakes</code> git remote pointing to a local bare repo, and installs the <code>/no-mistakes</code> skill for Claude Code at user level.</p>
-          <div class="term-block">
-            <div class="term-header">
-              <span class="term-title">Init</span>
-              <button class="term-copy" data-copy="cd ~/your-project && no-mistakes init">Copy</button>
+          <p>Run this once inside each repo you want to gate. It adds a <code>no-mistakes</code> git remote pointing to a local bare repo and installs the <code>/no-mistakes</code> skill for Claude Code at user level.</p>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">zsh</span>
+              <button class="term-copy" data-copy="no-mistakes init">Copy</button>
             </div>
-            <pre class="term-body">cd ~/your-project && no-mistakes init</pre>
+            <div class="term-body"><span class="prompt">➜</span> <span class="cmd">no-mistakes init</span>
+<span class="out">  ✓ Gate initialized
+
+    repo  /Users/you/src/my-repo
+    gate  no-mistakes → /Users/you/.no-mistakes/repos/abc123def456.git
+  remote  git@github.com:you/my-repo.git
+   skill  /no-mistakes installed for agents at user level
+
+  Push through the gate with:
+  git push no-mistakes &lt;branch&gt;</span></div>
           </div>
-          <p>For repos where you work on a fork (you push to your fork, PR goes to upstream), add the fork flag:</p>
-          <div class="term-block">
-            <div class="term-header">
-              <span class="term-title">Fork init</span>
+          <p style="margin-top:1rem">For fork-based repos (push to your fork, PR targets upstream):</p>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">zsh</span>
               <button class="term-copy" data-copy="no-mistakes init --fork-url git@github.com:manjesh-raj/repo-name.git">Copy</button>
             </div>
-            <pre class="term-body">no-mistakes init --fork-url git@github.com:manjesh-raj/repo-name.git</pre>
+            <div class="term-body"><span class="prompt">➜</span> <span class="cmd">no-mistakes init --fork-url git@github.com:manjesh-raj/repo-name.git</span></div>
           </div>
         </div>
       </div>
@@ -2144,25 +2161,25 @@ Only skip lavish if Manjesh explicitly asks for a Markdown file or says
         <div class="step-index">03</div>
         <div class="step-body">
           <h3>Three ways to trigger the gate</h3>
-          <table style="width:100%;border-collapse:collapse;font-size:0.92rem;">
+          <table style="width:100%;border-collapse:collapse;font-size:0.92rem;margin-top:0.5rem">
             <thead>
               <tr style="border-bottom:1px solid var(--border)">
-                <th style="text-align:left;padding:0.5rem 0.75rem;font-weight:600">Command</th>
-                <th style="text-align:left;padding:0.5rem 0.75rem;font-weight:600">When to use</th>
+                <th style="text-align:left;padding:0.5rem 0.75rem;font-weight:600;color:var(--subtle)">Command</th>
+                <th style="text-align:left;padding:0.5rem 0.75rem;font-weight:600;color:var(--subtle)">When to use</th>
               </tr>
             </thead>
             <tbody>
               <tr style="border-bottom:1px solid var(--border)">
-                <td style="padding:0.5rem 0.75rem"><code>git push no-mistakes</code></td>
-                <td style="padding:0.5rem 0.75rem">You already have a committed branch — push it through the gate instead of origin</td>
+                <td style="padding:0.6rem 0.75rem"><code>git push no-mistakes</code></td>
+                <td style="padding:0.6rem 0.75rem">Already have a committed branch - push through the gate instead of origin</td>
               </tr>
               <tr style="border-bottom:1px solid var(--border)">
-                <td style="padding:0.5rem 0.75rem"><code>no-mistakes</code></td>
-                <td style="padding:0.5rem 0.75rem">Opens the TUI — wizard commits, pushes through the gate, then shows findings. Use <code>no-mistakes -y</code> to skip wizard prompts</td>
+                <td style="padding:0.6rem 0.75rem"><code>no-mistakes</code></td>
+                <td style="padding:0.6rem 0.75rem">Opens the TUI wizard - commits, pushes through gate, shows findings. Add <code>-y</code> to skip prompts</td>
               </tr>
               <tr>
-                <td style="padding:0.5rem 0.75rem"><code>/no-mistakes &lt;task&gt;</code></td>
-                <td style="padding:0.5rem 0.75rem">Agent skill — tell Claude Code to do a task and gate it, or gate existing committed work with bare <code>/no-mistakes</code></td>
+                <td style="padding:0.6rem 0.75rem"><code>/no-mistakes &lt;task&gt;</code></td>
+                <td style="padding:0.6rem 0.75rem">Agent skill - tell Claude Code to do a task and gate it, or bare <code>/no-mistakes</code> to gate existing committed work</td>
               </tr>
             </tbody>
           </table>
@@ -2174,12 +2191,13 @@ Only skip lavish if Manjesh explicitly asks for a Markdown file or says
         <div class="step-index">04</div>
         <div class="step-body">
           <h3>How the pipeline works</h3>
-          <p>Every push through the gate runs through the same pipeline in an isolated worktree — your working tree is never touched while the pipeline is running.</p>
-          <div class="term-block">
-            <div class="term-header">
-              <span class="term-title">Pipeline</span>
+          <p>Every push runs through the same pipeline in an isolated worktree. Your working tree is never touched while the pipeline is running.</p>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">pipeline</span>
             </div>
-            <pre class="term-body">your branch
+            <div class="term-body"><span class="cmt">your branch
     │  git push no-mistakes
     ▼
 ┌──────────────────────────────────────────────┐
@@ -2188,9 +2206,9 @@ Only skip lavish if Manjesh explicitly asks for a Markdown file or says
 └──────────────────────────────────────────────┘
     │  every check green
     ▼
-clean PR, opened for you</pre>
+clean PR, opened for you</span></div>
           </div>
-          <p>Each step produces a <strong>finding</strong>. Safe mechanical fixes are applied automatically. Anything touching intent is escalated for you to <strong>approve</strong>, <strong>fix</strong>, or <strong>skip</strong>. Nothing reaches the real remote until every check is green.</p>
+          <p style="margin-top:1rem">Each step produces a <strong>finding</strong>. Safe mechanical fixes are applied automatically. Anything touching intent is escalated - <strong>approve</strong>, <strong>fix</strong>, or <strong>skip</strong>. Nothing reaches the real remote until every check is green.</p>
         </div>
       </div>
 
