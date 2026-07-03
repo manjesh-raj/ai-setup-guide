@@ -1,0 +1,2177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My AI Setup Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --base: #232136;
+    --surface: #272441;
+    --sidebar: #1c1a2e;
+    --overlay: #393552;
+    --overlay-soft: #302d4d;
+    --muted: #6e6a86;
+    --subtle: #908caa;
+    --text: #e0def4;
+    --gold: #f6c177;
+    --rose: #ea9a97;
+    --pine: #3e8fb0;
+    --foam: #9ccfd8;
+    --love: #eb6f92;
+
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  *{ box-sizing: border-box; }
+
+  html{ scroll-behavior: smooth; }
+
+  body{
+    margin:0;
+    background: var(--base);
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.6;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior: auto; }
+    *{ animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+
+  a{ color: var(--foam); }
+
+  /* ---------- Layout shell ---------- */
+  .shell{
+    display:flex;
+    min-height:100vh;
+  }
+
+  /* ---------- Sidebar ---------- */
+  .sidebar{
+    width: 264px;
+    flex-shrink:0;
+    background: var(--sidebar);
+    border-right: 1px solid var(--overlay);
+    padding: 28px 18px;
+    position: sticky;
+    top:0;
+    height:100vh;
+    overflow-y:auto;
+  }
+
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding: 4px 10px 26px 10px;
+    border-bottom: 1px solid var(--overlay);
+    margin-bottom: 18px;
+  }
+
+  .brand-mark{
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--gold), var(--rose));
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family: var(--font-mono);
+    font-weight:600;
+    font-size:14px;
+    color: var(--base);
+    flex-shrink:0;
+  }
+
+  .brand-text{
+    font-family: var(--font-display);
+    font-weight:600;
+    font-size: 15px;
+    letter-spacing: 0.01em;
+    color: var(--text);
+    line-height:1.25;
+  }
+
+  .brand-text span{
+    display:block;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight:400;
+    color: var(--subtle);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-top:2px;
+  }
+
+  .nav-label{
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    padding: 10px 10px 8px 10px;
+  }
+
+  .nav-list{
+    list-style:none;
+    margin:0 0 14px 0;
+    padding:0;
+    display:flex;
+    flex-direction:column;
+    gap: 2px;
+  }
+
+  .nav-item button{
+    all: unset;
+    display:flex;
+    align-items:center;
+    gap: 10px;
+    width:100%;
+    padding: 9px 10px;
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 13.5px;
+    font-weight:500;
+    color: var(--subtle);
+    cursor:pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .nav-item button:hover{
+    background: var(--overlay-soft);
+    color: var(--text);
+  }
+
+  .nav-item button:focus-visible{
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+  }
+
+  .nav-item.active button{
+    background: var(--overlay-soft);
+    color: var(--gold);
+  }
+
+  .nav-item.active button::before{
+    content: "";
+    width:4px;
+    height:4px;
+    border-radius:50%;
+    background: var(--gold);
+    flex-shrink:0;
+  }
+
+  .nav-item:not(.active) button::before{
+    content:"";
+    width:4px;
+    height:4px;
+    border-radius:50%;
+    background: transparent;
+    flex-shrink:0;
+  }
+
+  .nav-icon{
+    font-family: var(--font-mono);
+    font-size: 12px;
+    width: 18px;
+    text-align:center;
+    color: inherit;
+    opacity: 0.85;
+  }
+
+  .nav-item.disabled button{
+    cursor:default;
+    color: var(--muted);
+    opacity: 0.55;
+  }
+
+  .nav-item.disabled button:hover{
+    background: none;
+    color: var(--muted);
+  }
+
+  /* Sub-tabs inside a panel */
+  .sub-tabs{
+    display: flex;
+    gap: 6px;
+    margin-bottom: 28px;
+    border-bottom: 1px solid var(--overlay-soft);
+    padding-bottom: 0;
+  }
+  .sub-tab{
+    all: unset;
+    cursor: pointer;
+    padding: 8px 18px;
+    font-family: var(--font-body);
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--subtle);
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: color 0.15s ease, border-color 0.15s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .sub-tab:hover{ color: var(--text); }
+  .sub-tab.active{
+    color: var(--gold);
+    border-bottom-color: var(--gold);
+  }
+  .sub-tag{
+    font-family: var(--font-mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: var(--overlay-soft);
+    color: var(--muted);
+  }
+  .sub-tab.active .sub-tag{ color: var(--gold); opacity: 0.7; }
+  .sub-panel{ display: none; }
+  .sub-panel.active{ display: block; }
+
+  .soon-tag{
+    margin-left:auto;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    border: 1px solid var(--overlay);
+    padding: 2px 6px;
+    border-radius: 999px;
+  }
+
+  .sidebar-footer{
+    margin-top: 20px;
+    padding: 12px 10px;
+    border-top: 1px solid var(--overlay);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+    line-height:1.6;
+  }
+
+  /* ---------- Main content ---------- */
+  .main{
+    flex:1;
+    padding: 56px 48px 90px 48px;
+    max-width: 880px;
+  }
+
+  .panel{ display:none; }
+  .panel.active{ display:block; animation: fadeIn 0.25s ease; }
+
+  @keyframes fadeIn{
+    from{ opacity:0; transform: translateY(4px); }
+    to{ opacity:1; transform: translateY(0); }
+  }
+
+  .eyebrow{
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--pine);
+    margin-bottom: 10px;
+  }
+
+  h1{
+    font-family: var(--font-display);
+    font-size: 34px;
+    font-weight:700;
+    margin: 0 0 12px 0;
+    letter-spacing: -0.01em;
+  }
+
+  .lede{
+    color: var(--subtle);
+    font-size: 15.5px;
+    max-width: 620px;
+    margin-bottom: 40px;
+  }
+
+  h2{
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight:600;
+    margin: 0 0 6px 0;
+  }
+
+  h3{
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight:600;
+    color: var(--text);
+    margin: 0 0 10px 0;
+  }
+
+  p{ color: var(--text); font-size: 14.5px; }
+  p.muted-p{ color: var(--subtle); font-size: 14px; }
+
+  /* ---------- Steps ---------- */
+  .step{
+    display:flex;
+    gap: 18px;
+    padding: 26px 0;
+    border-top: 1px solid var(--overlay);
+  }
+
+  .step:first-of-type{ border-top:none; padding-top:0; }
+
+  .step-index{
+    flex-shrink:0;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: var(--overlay-soft);
+    border: 1px solid var(--overlay);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: var(--gold);
+    margin-top: 2px;
+  }
+
+  .step-body{ flex:1; min-width:0; }
+
+  .step-meta{
+    color: var(--subtle);
+    font-size: 13.5px;
+    margin: 4px 0 14px 0;
+  }
+
+  /* ---------- Terminal window (signature element) ---------- */
+  .term{
+    background: #1a1830;
+    border: 1px solid var(--overlay);
+    border-radius: 10px;
+    overflow:hidden;
+    margin: 14px 0 6px 0;
+    box-shadow: inset 0 1px 0 rgba(246,193,119,0.06), 0 8px 24px -12px rgba(0,0,0,0.5);
+  }
+
+  .term-bar{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding: 8px 14px;
+    background: linear-gradient(180deg, #211f3a, #1c1a30);
+    border-bottom: 1px solid var(--overlay);
+  }
+
+  .term-btn{
+    width: 34px;
+    height: 14px;
+    border-radius: 999px;
+    background: var(--overlay);
+    position:relative;
+  }
+
+  .term-btn::after{
+    content:"";
+    position:absolute;
+    top:3px; left:4px;
+    width:8px; height:8px;
+    border-radius:50%;
+    background: var(--muted);
+  }
+
+  .term-label{
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--subtle);
+    letter-spacing: 0.03em;
+    margin-left: 2px;
+  }
+
+  .term-copy{
+    all: unset;
+    margin-left:auto;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--subtle);
+    padding: 4px 9px;
+    border-radius: 6px;
+    border: 1px solid var(--overlay);
+    cursor:pointer;
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .term-copy:hover{ color: var(--gold); border-color: var(--gold); }
+  .term-copy:focus-visible{ outline: 2px solid var(--gold); outline-offset: 2px; }
+
+  .term-body{
+    padding: 16px 18px 18px 18px;
+    font-family: var(--font-mono);
+    font-size: 12.8px;
+    line-height: 1.7;
+    overflow-x: auto;
+    white-space: pre;
+  }
+
+  .term-body .prompt{ color: var(--foam); }
+  .term-body .cmd{ color: var(--text); }
+  .term-body .cmt{ color: var(--muted); }
+  .term-body .str{ color: var(--gold); }
+  .term-body .kw{ color: var(--rose); }
+  .term-body .fn{ color: var(--pine); }
+  .term-body .out{ color: var(--subtle); }
+
+  .cursor{
+    display:inline-block;
+    width: 7px;
+    height: 14px;
+    background: var(--gold);
+    vertical-align: middle;
+    margin-left: 2px;
+    animation: blink 1.1s steps(1) infinite;
+  }
+
+  @keyframes blink{ 50%{ opacity:0; } }
+
+  /* ---------- Callouts ---------- */
+  .callout{
+    display:flex;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: 10px;
+    margin: 14px 0;
+    font-size: 13.8px;
+    border: 1px solid var(--overlay);
+  }
+
+  .callout.warn{ background: rgba(234,154,151,0.08); border-color: rgba(234,154,151,0.35); }
+  .callout.warn .callout-icon{ color: var(--rose); }
+
+  .callout.info{ background: rgba(62,143,176,0.08); border-color: rgba(62,143,176,0.35); }
+  .callout.info .callout-icon{ color: var(--pine); }
+
+  .callout.success{ background: rgba(246,193,119,0.08); border-color: rgba(246,193,119,0.35); }
+  .callout.success .callout-icon{ color: var(--gold); }
+
+  .callout.note{ background: rgba(196,167,231,0.08); border-color: rgba(196,167,231,0.35); }
+  .callout.note .callout-icon{ color: var(--iris, #c4a7e7); }
+
+  .callout-icon{ font-family: var(--font-mono); font-weight:600; flex-shrink:0; }
+  .callout-text strong{ color: var(--text); }
+  .callout-text{ color: var(--subtle); }
+
+  /* ---------- Config explainer table ---------- */
+  .kv-table{
+    width:100%;
+    border-collapse: collapse;
+    margin: 14px 0 4px 0;
+    font-size: 13.3px;
+  }
+
+  .kv-table th{
+    text-align:left;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--overlay);
+  }
+
+  .kv-table td{
+    padding: 10px 10px;
+    border-bottom: 1px solid var(--overlay);
+    color: var(--subtle);
+    vertical-align: top;
+  }
+
+  .kv-table td.k{
+    font-family: var(--font-mono);
+    color: var(--foam);
+    white-space: nowrap;
+  }
+
+  .kv-table tr:last-child td{ border-bottom:none; }
+
+  /* ---------- Coming soon panel ---------- */
+  .empty-state{
+    border: 1px dashed var(--overlay);
+    border-radius: 12px;
+    padding: 48px 32px;
+    text-align:center;
+    color: var(--subtle);
+    margin-top: 20px;
+  }
+
+  .empty-state .emoji{ font-size: 22px; margin-bottom: 10px; }
+
+  /* ---------- Footer nav within page ---------- */
+  .done-banner{
+    margin-top: 36px;
+    padding: 20px 22px;
+    border-radius: 12px;
+    background: var(--surface);
+    border: 1px solid var(--overlay);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: 20px;
+    flex-wrap:wrap;
+  }
+
+  .done-banner p{ margin:0; color: var(--subtle); font-size: 13.8px; }
+  .done-banner strong{ color: var(--text); font-family: var(--font-display); font-size: 15px; }
+
+  @media (max-width: 860px){
+    .shell{ flex-direction:column; }
+    .sidebar{ position:relative; height:auto; width:100%; }
+    .main{ padding: 32px 20px 60px 20px; }
+  }
+  /* ── Step progress checkboxes ── */
+  :root { --sage: #88c09a; }
+
+  .step-index {
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    transition: background 0.2s, color 0.2s;
+  }
+  .step-index:hover { background: rgba(136,192,154,0.08); }
+  .step-index:hover::after {
+    content: '✓';
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    color: var(--sage);
+    opacity: 0.5;
+  }
+  .step.done .step-index {
+    background: rgba(136,192,154,0.12);
+    color: var(--sage);
+  }
+  .step.done .step-index::after {
+    content: '✓';
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    color: var(--sage);
+    opacity: 1;
+  }
+  .step.done .step-body { opacity: 0.4; pointer-events: none; }
+  .step-index-num { display: none; }
+  .step.done .step-index-num { display: none; }
+
+  /* ── Nav install dot ── */
+  .install-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--sage);
+    margin-left: auto;
+    flex-shrink: 0;
+    display: none;
+    box-shadow: 0 0 6px rgba(136,192,154,0.4);
+  }
+  .nav-item.all-done .install-dot { display: block; }
+
+  /* ── Copy button animation ── */
+  .term-copy { transition: background 0.25s ease, color 0.25s ease; }
+  .term-copy.copied {
+    background: rgba(136,192,154,0.18) !important;
+    color: var(--sage) !important;
+    border-color: rgba(136,192,154,0.3) !important;
+  }
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">⌘</div>
+      <div class="brand-text">My AI Setup Guide<span>Local workstation notes</span></div>
+    </div>
+
+    <ul class="nav-list" style="margin-bottom:10px;">
+      <li class="nav-item" data-target="quickref">
+        <button type="button"><span class="nav-icon">⌨</span> Quick Reference</button>
+      </li>
+    </ul>
+
+    <div class="nav-label">Environment</div>
+    <ul class="nav-list">
+      <li class="nav-item active" data-target="terminal">
+        <button type="button"><span class="nav-icon">▸_</span> Terminal Setup</button>
+      </li>
+    </ul>
+
+    <div class="nav-label">Productivity</div>
+    <ul class="nav-list">
+      <li class="nav-item" data-target="whisper">
+        <button type="button"><span class="nav-icon">◎</span> Voice Input</button>
+      </li>
+    </ul>
+
+    <div class="nav-label">Agentic Tooling</div>
+    <ul class="nav-list">
+      <li class="nav-item" data-target="claude-code">
+        <button type="button"><span class="nav-icon">✳</span> Claude Code</button>
+      </li>
+      <li class="nav-item" data-target="skills">
+        <button type="button"><span class="nav-icon">▤</span> Skills &amp; Plugins</button>
+      </li>
+      <li class="nav-item" data-target="lavish">
+        <button type="button"><span class="nav-icon">◈</span> Lavish</button>
+      </li>
+    </ul>
+
+    <div class="sidebar-footer">
+      macOS · Apple Silicon<br>
+      Last updated locally
+    </div>
+  </aside>
+
+  <!-- ============ MAIN CONTENT ============ -->
+  <main class="main">
+
+    <!-- ---------- Overview panel ---------- -->
+    <!-- ---------- Quick Reference panel ---------- -->
+    <section class="panel" id="panel-quickref">
+      <div class="eyebrow">Reference</div>
+      <h1>Quick Reference</h1>
+      <p class="lede">Daily-use commands in one place — no hunting through install steps. This is the panel you open after setup is done.</p>
+
+      <div class="step">
+        <div class="step-index">01</div>
+        <div class="step-body">
+          <h3>tmux</h3>
+          <table class="kv-table">
+            <tr><th>Keys</th><th>Action</th></tr>
+            <tr><td class="k">Ctrl+b  %</td><td>Split pane right</td></tr>
+            <tr><td class="k">Ctrl+b  "</td><td>Split pane below</td></tr>
+            <tr><td class="k">Ctrl+b  h/j/k/l</td><td>Navigate panes (vim-style)</td></tr>
+            <tr><td class="k">Ctrl+b  x</td><td>Close current pane</td></tr>
+            <tr><td class="k">Ctrl+b  d</td><td>Detach session (leaves it running)</td></tr>
+            <tr><td class="k">tmux new-session -A -s &lt;name&gt;</td><td>Create or attach to named session</td></tr>
+            <tr><td class="k">tmux ls</td><td>List running sessions</td></tr>
+            <tr><td class="k">tmux attach -t &lt;name&gt;</td><td>Re-attach to a session</td></tr>
+            <tr><td class="k">Ctrl+b  y</td><td>Enter copy mode</td></tr>
+            <tr><td class="k">v  (copy mode)</td><td>Start selection</td></tr>
+            <tr><td class="k">y  (copy mode)</td><td>Copy selection to macOS clipboard</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-index">02</div>
+        <div class="step-body">
+          <h3>Neovim</h3>
+          <table class="kv-table">
+            <tr><th>Keys</th><th>Action</th></tr>
+            <tr><td class="k">-</td><td>Open oil.nvim file browser</td></tr>
+            <tr><td class="k">:Neogit</td><td>Open git UI (stage, commit, push)</td></tr>
+            <tr><td class="k">:lua Snacks.picker.files()</td><td>Fuzzy file finder</td></tr>
+            <tr><td class="k">:lua Snacks.picker.grep()</td><td>Grep across codebase</td></tr>
+            <tr><td class="k">:Lazy</td><td>Open plugin manager UI</td></tr>
+            <tr><td class="k">Space (leader)</td><td>Leader key</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-index">03</div>
+        <div class="step-body">
+          <h3>Claude Code</h3>
+          <table class="kv-table">
+            <tr><th>Command</th><th>Action</th></tr>
+            <tr><td class="k">claude</td><td>Start interactive session in current directory</td></tr>
+            <tr><td class="k">claude -p "prompt"</td><td>One-shot non-interactive run</td></tr>
+            <tr><td class="k">/clear</td><td>Reset context between unrelated tasks</td></tr>
+            <tr><td class="k">/compact</td><td>Summarise conversation to free up context</td></tr>
+            <tr><td class="k">/init</td><td>Generate starter AGENTS.md for current project</td></tr>
+            <tr><td class="k">Esc</td><td>Stop Claude mid-action</td></tr>
+            <tr><td class="k">Esc Esc</td><td>Open rewind menu — restore to any checkpoint</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-index">04</div>
+        <div class="step-body">
+          <h3>lavish-axi</h3>
+          <table class="kv-table">
+            <tr><th>Command</th><th>Action</th></tr>
+            <tr><td class="k">lavish-axi &lt;file.html&gt;</td><td>Open artifact in browser for review</td></tr>
+            <tr><td class="k">lavish-axi poll &lt;file.html&gt;</td><td>Wait for feedback from browser</td></tr>
+            <tr><td class="k">lavish-axi end &lt;file.html&gt;</td><td>End the review session</td></tr>
+            <tr><td class="k">lavish-axi export &lt;file.html&gt;</td><td>Export portable self-contained HTML</td></tr>
+            <tr><td class="k">lavish-axi share &lt;file.html&gt;</td><td>Publish to ht-ml.app and get a public URL</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-index">05</div>
+        <div class="step-body">
+          <h3>Reference</h3>
+          <table class="kv-table" style="margin-bottom:22px;">
+            <tr><th>Resource</th><th>What's there</th></tr>
+            <tr><td class="k"><a href="https://www.youtube.com/watch?v=iQyg-KypKAA" target="_blank" style="color:var(--gold);text-decoration:none;">Kun Chen — YouTube</a></td><td>Agentic engineering workflow video this entire setup is based on</td></tr>
+            <tr><td class="k"><a href="https://axi.md/" target="_blank" style="color:var(--gold);text-decoration:none;">axi.md</a></td><td>Official lavish-axi docs — playbooks, commands, design guidance</td></tr>
+            <tr><td class="k"><a href="https://github.com/kunchenguid/lavish-axi" target="_blank" style="color:var(--gold);text-decoration:none;">github/lavish-axi</a></td><td>Source code, releases, issue tracker</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-index">06</div>
+        <div class="step-body">
+          <h3>Agentic layout — standard tmux split</h3>
+          <div class="term">
+        <div class="term-bar"><div class="term-btn"></div><span class="term-label">build this layout</span></div>
+        <div class="term-body"><span class="cmt">┌─────────────────┬──────────────────┐
+│                 │   2: shell       │
+│   1: nvim       │   (git, builds)  │
+│                 ├──────────────────┤
+│                 │   3: Claude Code │
+└─────────────────┴──────────────────┘</span>
+
+<span class="prompt">➜</span> <span class="cmd">tmux new-session -A -s work</span>
+<span class="prompt">➜</span> <span class="cmd">nvim</span>
+<span class="cmt">  Ctrl+b %   → split right (pane 2)</span>
+<span class="cmt">  Ctrl+b "   → split below (pane 3)</span>
+<span class="prompt">➜</span> <span class="cmd">claude</span>
+<span class="cmt">  Ctrl+b h   → back to nvim</span></div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ---------- Terminal Setup panel ---------- -->
+    <section class="panel active" id="panel-terminal">
+      <div class="eyebrow">Environment · Terminal</div>
+      <h1>Terminal Setup</h1>
+
+      <div class="sub-tabs">
+        <button class="sub-tab active" data-sub="wezterm">WezTerm <span class="sub-tag">terminal emulator</span></button>
+        <button class="sub-tab" data-sub="tmux">tmux <span class="sub-tag">multiplexer</span></button>
+        <button class="sub-tab" data-sub="editor">Text Editor <span class="sub-tag">neovim</span></button>
+      </div>
+
+      <!-- ===== WEZTERM SUB-TAB ===== -->
+      <div class="sub-panel active" id="sub-wezterm">
+      <p class="lede">Installing and configuring WezTerm on macOS (Apple Silicon), including the Nerd Font, the full <code>wezterm.lua</code>, and the troubleshooting steps that actually got it working.</p>
+
+      <!-- Step 1 -->
+      <div class="step">
+        <div class="step-index">01</div>
+        <div class="step-body">
+          <h3>Install the Hack Nerd Font</h3>
+          <p class="step-meta">WezTerm's config references this font by name, so it needs to exist before the config will render correctly.</p>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">zsh</span>
+              <button class="term-copy" data-copy="brew install --cask font-hack-nerd-font">Copy</button>
+            </div>
+            <div class="term-body"><span class="prompt">➜</span> <span class="cmd">brew install --cask font-hack-nerd-font</span>
+<span class="out">==> Installing Cask font-hack-nerd-font
+🍺  font-hack-nerd-font was successfully installed!</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step">
+        <div class="step-index">02</div>
+        <div class="step-body">
+          <h3>Create the config folder</h3>
+          <p class="step-meta">WezTerm looks for its config at <code>~/.config/wezterm/wezterm.lua</code> on macOS.</p>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">zsh</span>
+              <button class="term-copy" data-copy="mkdir -p ~/.config/wezterm">Copy</button>
+            </div>
+            <div class="term-body"><span class="prompt">➜</span> <span class="cmd">mkdir -p ~/.config/wezterm</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step">
+        <div class="step-index">03</div>
+        <div class="step-body">
+          <h3>Install WezTerm itself</h3>
+          <p class="step-meta">Easy to skip since the font and config feel like "the setup" — the app still has to be installed separately.</p>
+          <div class="callout warn">
+            <span class="callout-icon">!</span>
+            <span class="callout-text"><strong>Don't skip this one.</strong> The font and config can be fully in place while the app itself is still missing — <code>which wezterm</code> will come back empty and nothing will look different.</span>
+          </div>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">zsh</span>
+              <button class="term-copy" data-copy="brew install --cask wezterm">Copy</button>
+            </div>
+            <div class="term-body"><span class="prompt">➜</span> <span class="cmd">brew install --cask wezterm</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="step">
+        <div class="step-index">04</div>
+        <div class="step-body">
+          <h3>Write the config file</h3>
+          <p class="step-meta">Full contents of <code>~/.config/wezterm/wezterm.lua</code> — OS-aware, with separate branches for macOS and Windows.</p>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">~/.config/wezterm/wezterm.lua</span>
+              <button class="term-copy" data-copy="local wezterm = require(&quot;wezterm&quot;)&#10;&#10;local config = wezterm.config_builder()&#10;&#10;local is_windows = os.getenv(&quot;OS&quot;) and os.getenv(&quot;OS&quot;):lower():find(&quot;windows&quot;)&#10;local is_macos = wezterm.target_triple:lower():find(&quot;darwin&quot;) ~= nil&#10;&#10;config.color_scheme = &quot;rose-pine-moon&quot;&#10;config.max_fps = 120&#10;config.font = wezterm.font(&quot;Hack Nerd Font&quot;, { weight = &quot;DemiBold&quot; })&#10;config.window_decorations = &quot;INTEGRATED_BUTTONS|RESIZE&quot;&#10;config.window_frame = {&#10;  font = wezterm.font(&quot;Hack Nerd Font&quot;, { weight = &quot;Bold&quot; }),&#10;}&#10;config.inactive_pane_hsb = {&#10;  saturation = 0.0,&#10;  brightness = 0.5,&#10;}&#10;&#10;if is_windows then&#10;  config.win32_system_backdrop = &quot;Acrylic&quot;&#10;  config.window_background_opacity = 0.7&#10;  config.window_frame.font_size = 10.0&#10;end&#10;&#10;if is_macos then&#10;  config.window_background_opacity = 0.8&#10;  config.macos_window_background_blur = 50&#10;  config.font_size = 15.0&#10;  config.window_frame.font_size = 13.0&#10;end&#10;&#10;return config">Copy</button>
+            </div>
+            <div class="term-body"><span class="kw">local</span> <span class="cmd">wezterm</span> = <span class="fn">require</span>(<span class="str">"wezterm"</span>)
+
+<span class="kw">local</span> <span class="cmd">config</span> = wezterm.config_builder()
+
+<span class="kw">local</span> <span class="cmd">is_windows</span> = os.getenv(<span class="str">"OS"</span>) <span class="kw">and</span> os.getenv(<span class="str">"OS"</span>):lower():find(<span class="str">"windows"</span>)
+<span class="kw">local</span> <span class="cmd">is_macos</span> = wezterm.target_triple:lower():find(<span class="str">"darwin"</span>) ~= <span class="kw">nil</span>
+
+config.color_scheme = <span class="str">"rose-pine-moon"</span>
+config.max_fps = <span class="cmd">120</span>
+config.font = wezterm.font(<span class="str">"Hack Nerd Font"</span>, { weight = <span class="str">"DemiBold"</span> })
+config.window_decorations = <span class="str">"INTEGRATED_BUTTONS|RESIZE"</span>
+config.window_frame = {
+  font = wezterm.font(<span class="str">"Hack Nerd Font"</span>, { weight = <span class="str">"Bold"</span> }),
+}
+config.inactive_pane_hsb = {
+  saturation = <span class="cmd">0.0</span>,
+  brightness = <span class="cmd">0.5</span>,
+}
+
+<span class="kw">if</span> is_windows <span class="kw">then</span>
+  config.win32_system_backdrop = <span class="str">"Acrylic"</span>
+  config.window_background_opacity = <span class="cmd">0.7</span>
+  config.window_frame.font_size = <span class="cmd">10.0</span>
+<span class="kw">end</span>
+
+<span class="kw">if</span> is_macos <span class="kw">then</span>
+  config.window_background_opacity = <span class="cmd">0.8</span>
+  config.macos_window_background_blur = <span class="cmd">50</span>
+  config.font_size = <span class="cmd">15.0</span>
+  config.window_frame.font_size = <span class="cmd">13.0</span>
+<span class="kw">end</span>
+
+<span class="kw">return</span> config</div>
+          </div>
+
+          <h3 style="margin-top:26px;">What each part actually does</h3>
+          <table class="kv-table">
+            <tr><th>Setting</th><th>Effect</th></tr>
+            <tr><td class="k">color_scheme</td><td>Built-in Rose Pine Moon palette — no separate install needed.</td></tr>
+            <tr><td class="k">max_fps</td><td>Caps rendering at 120fps for smoother scrolling on high refresh-rate displays.</td></tr>
+            <tr><td class="k">font</td><td>Hack Nerd Font, DemiBold weight, for the terminal body text.</td></tr>
+            <tr><td class="k">window_decorations</td><td>Merges the close/minimize/zoom buttons into the tab bar instead of a separate title bar.</td></tr>
+            <tr><td class="k">inactive_pane_hsb</td><td>Desaturates and dims panes that aren't focused, so the active split stands out.</td></tr>
+            <tr><td class="k">is_macos block</td><td>0.8 window opacity, 50pt background blur, 15pt terminal font, 13pt frame font — macOS-only.</td></tr>
+            <tr><td class="k">is_windows block</td><td>Acrylic backdrop, 0.7 opacity, 10pt frame font — only applies on Windows machines.</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="step">
+        <div class="step-index">05</div>
+        <div class="step-body">
+          <h3>Launch WezTerm</h3>
+          <p class="step-meta">Open it directly rather than assuming a terminal window is already WezTerm — Terminal.app and iTerm will happily run the same commands and show none of this styling.</p>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">zsh</span>
+              <button class="term-copy" data-copy="open -a WezTerm">Copy</button>
+            </div>
+            <div class="term-body"><span class="prompt">➜</span> <span class="cmd">open -a WezTerm</span></div>
+          </div>
+          <div class="callout info">
+            <span class="callout-icon">i</span>
+            <span class="callout-text">Config changes apply automatically on save. If a change doesn't seem to take, reload manually with <strong>Cmd + Shift + R</strong> inside the WezTerm window.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 6: Troubleshooting -->
+      <div class="step">
+        <div class="step-index">06</div>
+        <div class="step-body">
+          <h3>Troubleshooting checklist</h3>
+          <p class="step-meta">In order — this is the exact sequence that found the actual problem last time (WezTerm was never installed).</p>
+
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">zsh</span>
+              <button class="term-copy" data-copy="cat ~/.config/wezterm/wezterm.lua">Copy</button>
+            </div>
+            <div class="term-body"><span class="prompt">➜</span> <span class="cmd">cat ~/.config/wezterm/wezterm.lua</span>
+<span class="cmt"># confirms the file actually saved and has all 33 lines</span></div>
+          </div>
+
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">zsh</span>
+              <button class="term-copy" data-copy="which wezterm&#10;ls /Applications/ | grep -i wezterm">Copy</button>
+            </div>
+            <div class="term-body"><span class="prompt">➜</span> <span class="cmd">which wezterm</span>
+<span class="prompt">➜</span> <span class="cmd">ls /Applications/ | grep -i wezterm</span>
+<span class="cmt"># confirms whether WezTerm is installed at all</span></div>
+          </div>
+
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">zsh</span>
+              <button class="term-copy" data-copy="/Applications/WezTerm.app/Contents/MacOS/wezterm">Copy</button>
+            </div>
+            <div class="term-body"><span class="prompt">➜</span> <span class="cmd">/Applications/WezTerm.app/Contents/MacOS/wezterm</span>
+<span class="cmt"># runs WezTerm in the foreground so any config/startup error prints right here</span></div>
+          </div>
+
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">zsh</span>
+              <button class="term-copy" data-copy="wezterm ls-fonts --config-file ~/.config/wezterm/wezterm.lua">Copy</button>
+            </div>
+            <div class="term-body"><span class="prompt">➜</span> <span class="cmd">wezterm ls-fonts --config-file ~/.config/wezterm/wezterm.lua</span>
+<span class="cmt"># validates the Lua file directly and surfaces syntax errors</span></div>
+          </div>
+
+          <div class="callout success">
+            <span class="callout-icon">✓</span>
+            <span class="callout-text"><strong>Root cause last time:</strong> the font and config were both correctly in place — WezTerm itself just hadn't been installed yet. <code>brew install --cask wezterm</code> fixed it.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="done-banner">
+        <p><strong>WezTerm — done.</strong><br>Rose Pine Moon, Hack Nerd Font, 15pt body text, 50pt blur.</p>
+        <div class="term" style="margin:0; width:260px;">
+          <div class="term-bar"><div class="term-btn"></div><span class="term-label">wezterm</span></div>
+          <div class="term-body" style="font-size:12px;"><span class="prompt">➜</span> <span class="cmd">ready</span><span class="cursor"></span></div>
+        </div>
+      </div>
+      </div><!-- /sub-wezterm -->
+
+      <!-- ===== TMUX SUB-TAB ===== -->
+      <div class="sub-panel" id="sub-tmux">
+      <p class="lede">Installing tmux and applying the config, ported from a Nix Home Manager module (<code>common.nix</code>) into <code>~/.config/tmux/tmux.conf</code> — keeping all tool configs under <code>~/.config/</code>, consistent with WezTerm.</p>
+
+      <div class="callout note">
+        <span class="callout-icon">i</span>
+        <span class="callout-text"><strong>Source is a fragment.</strong> The screenshot was mid-file (absolute line 210 of a longer <code>common.nix</code>), and a few <code>bind-key</code> lines ran past the edge of the screen. The lines marked below are reconstructed from standard tmux convention, not read verbatim — worth a quick diff against the source file if you want it exact.</span>
+      </div>
+
+      <!-- Step 1 -->
+      <div class="step">
+        <div class="step-index">01</div>
+        <div class="step-body">
+          <h3>Install tmux</h3>
+          <p class="step-meta">Via Homebrew, same as WezTerm.</p>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">zsh</span>
+              <button class="term-copy" data-copy="brew install tmux">Copy</button>
+            </div>
+            <div class="term-body"><span class="prompt">➜</span> <span class="cmd">brew install tmux</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step">
+        <div class="step-index">02</div>
+        <div class="step-body">
+          <h3>Create the config folder and file</h3>
+          <p class="step-meta">tmux 3.1+ follows the XDG spec and looks for config at <code>~/.config/tmux/tmux.conf</code> automatically — same pattern as WezTerm, no extra env vars needed.</p>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">zsh</span>
+              <button class="term-copy" data-copy="mkdir -p ~/.config/tmux && touch ~/.config/tmux/tmux.conf">Copy</button>
+            </div>
+            <div class="term-body"><span class="prompt">➜</span> <span class="cmd">mkdir -p ~/.config/tmux && touch ~/.config/tmux/tmux.conf</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step">
+        <div class="step-index">03</div>
+        <div class="step-body">
+          <h3>Write the config</h3>
+          <p class="step-meta">Ported setting-by-setting from the Home Manager module's typed options, plus its <code>extraConfig</code> block copied through as raw tmux syntax.</p>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">~/.config/tmux/tmux.conf</span>
+              <button class="term-copy" data-copy="# Ported from common.nix (programs.tmux)&#10;set -g base-index 1&#10;set -g pane-base-index 1&#10;set -g clock-mode-style 24&#10;set -g focus-events on&#10;set -g mouse on&#10;set -g default-terminal &quot;screen-256color&quot;&#10;setw -g mode-keys vi&#10;set -g status-keys vi&#10;&#10;# extraConfig (verbatim)&#10;set -g renumber-windows on&#10;set -g escape-time 10&#10;set -g extended-keys on&#10;set -g extended-keys-format csi-u&#10;set -g status-position top&#10;set -g pane-border-lines heavy&#10;setw -gu window-style&#10;setw -gu window-active-style&#10;&#10;bind-key -r h select-pane -L&#10;bind-key -r j select-pane -D&#10;bind-key -r k select-pane -U&#10;bind-key -r l select-pane -R&#10;&#10;bind-key '&quot;' split-window -c &quot;#{pane_current_path}&quot;&#10;bind-key % split-window -h -c &quot;#{pane_current_path}&quot;&#10;bind-key c new-window -c &quot;#{pane_current_path}&quot;&#10;bind-key & kill-window&#10;&#10;bind-key y copy-mode&#10;bind-key -T copy-mode-vi v send-keys -X begin-selection&#10;bind-key -T copy-mode-vi y send-keys -X copy-pipe-and-cancel &quot;pbcopy&quot;&#10;bind-key -T copy-mode-vi Enter send-keys -X copy-pipe-and-cancel &quot;pbcopy&quot;">Copy</button>
+            </div>
+            <div class="term-body"><span class="cmt"># Ported from common.nix (programs.tmux)</span>
+<span class="fn">set</span> -g base-index <span class="cmd">1</span>
+<span class="fn">set</span> -g pane-base-index <span class="cmd">1</span>
+<span class="fn">set</span> -g clock-mode-style <span class="cmd">24</span>
+<span class="fn">set</span> -g focus-events on
+<span class="fn">set</span> -g mouse on
+<span class="fn">set</span> -g default-terminal <span class="str">"screen-256color"</span>
+setw -g mode-keys vi
+<span class="fn">set</span> -g status-keys vi
+
+<span class="cmt"># extraConfig (verbatim)</span>
+<span class="fn">set</span> -g renumber-windows on
+<span class="fn">set</span> -g escape-time <span class="cmd">10</span>
+<span class="fn">set</span> -g extended-keys on
+<span class="fn">set</span> -g extended-keys-format csi-u
+<span class="fn">set</span> -g status-position top
+<span class="fn">set</span> -g pane-border-lines heavy
+setw -gu window-style
+setw -gu window-active-style
+
+bind-key -r h select-pane -L
+bind-key -r j select-pane -D
+bind-key -r k select-pane -U
+bind-key -r l select-pane -R
+
+bind-key <span class="str">'"'</span> split-window -c <span class="str">"#{pane_current_path}"</span>
+bind-key % split-window -h -c <span class="str">"#{pane_current_path}"</span>
+bind-key c new-window -c <span class="str">"#{pane_current_path}"</span>
+bind-key &amp; kill-window
+
+bind-key y copy-mode
+bind-key -T copy-mode-vi v send-keys -X begin-selection
+bind-key -T copy-mode-vi y send-keys -X copy-pipe-and-cancel <span class="str">"pbcopy"</span> <span class="cmt">← reconstructed</span>
+bind-key -T copy-mode-vi Enter send-keys -X copy-pipe-and-cancel <span class="str">"pbcopy"</span> <span class="cmt">← reconstructed</span></div>
+          </div>
+
+          <h3 style="margin-top:26px;">What each part does</h3>
+          <table class="kv-table">
+            <tr><th>Setting</th><th>Effect</th></tr>
+            <tr><td class="k">base-index / pane-base-index</td><td>Windows and panes start numbering at 1 instead of 0.</td></tr>
+            <tr><td class="k">clock-mode-style 24</td><td>24-hour clock in tmux's built-in clock view (<code>prefix + t</code>).</td></tr>
+            <tr><td class="k">focus-events on</td><td>Lets apps inside tmux (like Neovim) know when a pane gains/loses focus.</td></tr>
+            <tr><td class="k">mode-keys / status-keys vi</td><td>Vi-style navigation in copy-mode and the command prompt.</td></tr>
+            <tr><td class="k">mouse on</td><td>Click to switch panes, drag to resize, scroll to scroll back.</td></tr>
+            <tr><td class="k">escape-time 10</td><td>Cuts the delay after pressing Escape — makes Neovim inside tmux feel instant.</td></tr>
+            <tr><td class="k">pane-border-lines heavy</td><td>Thicker visual divider between panes.</td></tr>
+            <tr><td class="k">h / j / k / l select-pane</td><td>Vim-style pane navigation, repeatable (<code>-r</code>) without re-pressing the prefix each time.</td></tr>
+            <tr><td class="k">" and %</td><td>Split the current pane vertically / horizontally, opening in the same working directory.</td></tr>
+            <tr><td class="k">copy-pipe-and-cancel "pbcopy"</td><td>Sends the selection straight to the macOS clipboard when copying in vi copy-mode.</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="step">
+        <div class="step-index">04</div>
+        <div class="step-body">
+          <h3>Load it</h3>
+          <p class="step-meta">Start a new session, or reload the config into a session that's already running.</p>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">zsh</span>
+              <button class="term-copy" data-copy="tmux">Copy</button>
+            </div>
+            <div class="term-body"><span class="prompt">➜</span> <span class="cmd">tmux</span>
+<span class="cmt"># starts a fresh unnamed session using ~/.tmux.conf</span></div>
+          </div>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">inside tmux</span>
+              <button class="term-copy" data-copy="tmux source-file ~/.config/tmux/tmux.conf">Copy</button>
+            </div>
+            <div class="term-body"><span class="prompt">➜</span> <span class="cmd">tmux source-file ~/.config/tmux/tmux.conf</span>
+<span class="cmt"># reloads config without restarting the session</span></div>
+          </div>
+          <div class="callout info">
+            <span class="callout-icon">i</span>
+            <span class="callout-text">Default prefix is still <strong>Ctrl + b</strong> — this config doesn't remap it, so pane splits are <code>prefix</code> then <code>"</code> or <code>%</code>, and pane navigation is <code>prefix</code> then <code>h/j/k/l</code>.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="step">
+        <div class="step-index">05</div>
+        <div class="step-body">
+          <h3>Start a named session</h3>
+          <p class="step-meta">Always give sessions a name — makes it easy to find and re-attach later. The <code>-A</code> flag attaches if the session already exists, or creates it if it doesn't.</p>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">zsh</span>
+              <button class="term-copy" data-copy="tmux new-session -A -s devops-test">Copy</button>
+            </div>
+            <div class="term-body"><span class="prompt">➜</span> <span class="cmd">tmux new-session -A -s devops-test</span>
+<span class="cmt"># creates session named "devops-test", or attaches if it already exists</span></div>
+          </div>
+          <div class="callout warn">
+            <span class="callout-icon">!</span>
+            <span class="callout-text"><strong>Common typo:</strong> the command is <code>tmux</code>, not <code>tumx</code>. Easy to mix up — double-check before hitting Enter.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 6 -->
+      <div class="step">
+        <div class="step-index">06</div>
+        <div class="step-body">
+          <h3>Detach and re-attach</h3>
+          <p class="step-meta">Detaching leaves the session running in the background — everything keeps going. Re-attach from any new terminal window.</p>
+
+          <h3 style="margin-top:18px; color: var(--subtle); font-size:13px; text-transform:uppercase; letter-spacing:0.06em;">Detach (leave session running)</h3>
+          <div class="callout note">
+            <span class="callout-icon">⌨</span>
+            <span class="callout-text">
+              <strong>Ctrl + b</strong>, then release both keys, then press <strong>d</strong><br>
+              <span style="font-size:13px;">This is a two-step sequence — press the prefix first, let go, then the key. Not <code>Ctrl+A+D</code> (that's GNU Screen). Not <code>Ctrl+D</code> (that closes the shell entirely).</span>
+            </span>
+          </div>
+
+          <h3 style="margin-top:18px; color: var(--subtle); font-size:13px; text-transform:uppercase; letter-spacing:0.06em;">Check what sessions are running</h3>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">zsh</span>
+              <button class="term-copy" data-copy="tmux ls">Copy</button>
+            </div>
+            <div class="term-body"><span class="prompt">➜</span> <span class="cmd">tmux ls</span>
+<span class="out">devops-test: 1 windows (created Wed Jul  2 10:00:00 2025)</span>
+<span class="cmt"># if the session appears here, it's alive — just detached</span></div>
+          </div>
+
+          <h3 style="margin-top:18px; color: var(--subtle); font-size:13px; text-transform:uppercase; letter-spacing:0.06em;">Re-attach</h3>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">zsh</span>
+              <button class="term-copy" data-copy="tmux attach -t devops-test">Copy</button>
+            </div>
+            <div class="term-body"><span class="prompt">➜</span> <span class="cmd">tmux attach -t devops-test</span>
+<span class="cmt"># or use new-session -A -s devops-test — same result</span></div>
+          </div>
+
+          <div class="callout info">
+            <span class="callout-icon">i</span>
+            <span class="callout-text">If detaching closes your terminal window, don't worry — the session is still alive. Open a new terminal and run <code>tmux ls</code> to confirm, then re-attach.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 7 -->
+      <div class="step">
+        <div class="step-index">07</div>
+        <div class="step-body">
+          <h3>Pane splitting &amp; navigation</h3>
+          <p class="step-meta">All splits open in the same working directory (set by the config). Navigate between panes with vim keys — no mouse required.</p>
+
+          <h3 style="margin-top:18px; color: var(--subtle); font-size:13px; text-transform:uppercase; letter-spacing:0.06em;">Split commands</h3>
+          <table class="kv-table">
+            <tr><th>Keys</th><th>Action</th></tr>
+            <tr><td class="k">Ctrl+b  then  %</td><td>Split <strong>right</strong> — new pane side by side</td></tr>
+            <tr><td class="k">Ctrl+b  then  "</td><td>Split <strong>below</strong> — new pane underneath</td></tr>
+            <tr><td class="k">Ctrl+b  then  x</td><td>Close the current pane</td></tr>
+          </table>
+
+          <h3 style="margin-top:22px; color: var(--subtle); font-size:13px; text-transform:uppercase; letter-spacing:0.06em;">Navigate between panes</h3>
+          <table class="kv-table">
+            <tr><th>Keys</th><th>Action</th></tr>
+            <tr><td class="k">Ctrl+b  then  h</td><td>Move to the pane on the left</td></tr>
+            <tr><td class="k">Ctrl+b  then  l</td><td>Move to the pane on the right</td></tr>
+            <tr><td class="k">Ctrl+b  then  k</td><td>Move to the pane above</td></tr>
+            <tr><td class="k">Ctrl+b  then  j</td><td>Move to the pane below</td></tr>
+          </table>
+
+          <h3 style="margin-top:22px; color: var(--subtle); font-size:13px; text-transform:uppercase; letter-spacing:0.06em;">Standard agentic layout</h3>
+          <p class="step-meta">This is the layout to use when working with Claude Code — editor on the left, shell and agent on the right.</p>
+
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">layout diagram</span>
+            </div>
+            <div class="term-body"><span class="cmt">┌─────────────────┬──────────────────┐
+│                 │   2: shell       │
+│   1: nvim       │   (git, builds)  │
+│                 ├──────────────────┤
+│                 │   3: Claude Code │
+└─────────────────┴──────────────────┘</span>
+
+<span class="cmt"># How to build it:</span>
+<span class="prompt">➜</span> <span class="cmd">tmux new-session -A -s work</span>      <span class="cmt"># start session</span>
+<span class="prompt">➜</span> <span class="cmd">nvim</span>                               <span class="cmt"># open editor in pane 1</span>
+<span class="cmt">  Ctrl+b %                            # split right → pane 2 (shell)</span>
+<span class="cmt">  Ctrl+b "                            # split below → pane 3 (Claude Code)</span>
+<span class="prompt">➜</span> <span class="cmd">claude</span>                             <span class="cmt"># launch Claude Code in pane 3</span>
+<span class="cmt">  Ctrl+b h                            # jump back left to nvim</span></div>
+          </div>
+
+          <div class="callout info">
+            <span class="callout-icon">i</span>
+            <span class="callout-text">The split commands (<code>%</code> and <code>"</code>) act on whichever pane is currently focused — move to the right pane first before splitting below, or you'll split the left pane instead.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="done-banner">
+        <p><strong>tmux — done.</strong><br>Core bindings and vi copy-mode confirmed; verify the two <code>copy-pipe-and-cancel</code> lines against the source if exactness matters.</p>
+        <div class="term" style="margin:0; width:260px;">
+          <div class="term-bar"><div class="term-btn"></div><span class="term-label">tmux</span></div>
+          <div class="term-body" style="font-size:12px;"><span class="prompt">➜</span> <span class="cmd">attached</span><span class="cursor"></span></div>
+        </div>
+      </div>
+      </div><!-- /sub-tmux -->
+
+      <!-- ===== EDITOR SUB-TAB ===== -->
+      <div class="sub-panel" id="sub-editor">
+      <p class="lede">Installing Neovim and wiring up three plugins from Kun Chen's agentic workflow — oil.nvim for file navigation, neogit for git, and snacks.nvim for fuzzy finding. Plugin manager is lazy.nvim.</p>
+
+      <!-- Step 1 -->
+      <div class="step">
+        <div class="step-index">01</div>
+        <div class="step-body">
+          <h3>Install Neovim</h3>
+          <p class="step-meta">Via Homebrew. Installs the latest stable release.</p>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">zsh</span>
+              <button class="term-copy" data-copy="brew install neovim">Copy</button>
+            </div>
+            <div class="term-body"><span class="prompt">➜</span> <span class="cmd">brew install neovim</span>
+<span class="out">🍺  /opt/homebrew/Cellar/neovim/0.12.3: 2,112 files, 29.7MB</span></div>
+          </div>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">zsh</span>
+              <button class="term-copy" data-copy="nvim --version">Copy</button>
+            </div>
+            <div class="term-body"><span class="prompt">➜</span> <span class="cmd">nvim --version</span>
+<span class="out">NVIM v0.12.3</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step">
+        <div class="step-index">02</div>
+        <div class="step-body">
+          <h3>Create the config folder</h3>
+          <p class="step-meta">Neovim looks for its config at <code>~/.config/nvim/init.lua</code> — same <code>~/.config/</code> pattern as WezTerm and tmux.</p>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">zsh</span>
+              <button class="term-copy" data-copy="mkdir -p ~/.config/nvim">Copy</button>
+            </div>
+            <div class="term-body"><span class="prompt">➜</span> <span class="cmd">mkdir -p ~/.config/nvim</span></div>
+          </div>
+          <div class="callout info">
+            <span class="callout-icon">i</span>
+            <span class="callout-text"><code>~/.config/</code> now holds all three tools: <strong>wezterm/</strong>, <strong>tmux/</strong>, and <strong>nvim/</strong> — one place for everything.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step">
+        <div class="step-index">03</div>
+        <div class="step-body">
+          <h3>Write the config — init.lua</h3>
+          <p class="step-meta">Full contents of <code>~/.config/nvim/init.lua</code>. Bootstraps lazy.nvim on first launch and registers the three plugins.</p>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">~/.config/nvim/init.lua</span>
+              <button class="term-copy" data-copy="-- Bootstrap lazy.nvim&#10;local lazypath = vim.fn.stdpath(&quot;data&quot;) .. &quot;/lazy/lazy.nvim&quot;&#10;if not vim.loop.fs_stat(lazypath) then&#10;  vim.fn.system({&#10;    &quot;git&quot;, &quot;clone&quot;, &quot;--filter=blob:none&quot;,&#10;    &quot;https://github.com/folke/lazy.nvim.git&quot;,&#10;    &quot;--branch=stable&quot;,&#10;    lazypath,&#10;  })&#10;end&#10;vim.opt.rtp:prepend(lazypath)&#10;&#10;-- Options&#10;vim.opt.number = true&#10;vim.opt.relativenumber = true&#10;vim.opt.tabstop = 2&#10;vim.opt.shiftwidth = 2&#10;vim.opt.expandtab = true&#10;vim.opt.termguicolors = true&#10;&#10;-- Leader key&#10;vim.g.mapleader = &quot; &quot;&#10;&#10;-- Plugins&#10;require(&quot;lazy&quot;).setup({&#10;&#10;  -- File navigation (replaces netrw)&#10;  {&#10;    &quot;stevearc/oil.nvim&quot;,&#10;    opts = {},&#10;  },&#10;&#10;  -- Git: status, diffs, commits&#10;  {&#10;    &quot;NeogitOrg/neogit&quot;,&#10;    dependencies = {&#10;      &quot;nvim-lua/plenary.nvim&quot;,&#10;      &quot;sindrets/diffview.nvim&quot;,&#10;    },&#10;    config = true,&#10;  },&#10;&#10;  -- File finding and codebase grepping&#10;  {&#10;    &quot;folke/snacks.nvim&quot;,&#10;    priority = 1000,&#10;    lazy = false,&#10;    opts = {&#10;      picker = { enabled = true },&#10;    },&#10;  },&#10;&#10;})">Copy</button>
+            </div>
+            <div class="term-body"><span class="cmt">-- Bootstrap lazy.nvim</span>
+<span class="kw">local</span> lazypath = vim.fn.stdpath(<span class="str">"data"</span>) .. <span class="str">"/lazy/lazy.nvim"</span>
+<span class="kw">if not</span> vim.loop.fs_stat(lazypath) <span class="kw">then</span>
+  vim.fn.system({
+    <span class="str">"git"</span>, <span class="str">"clone"</span>, <span class="str">"--filter=blob:none"</span>,
+    <span class="str">"https://github.com/folke/lazy.nvim.git"</span>,
+    <span class="str">"--branch=stable"</span>, lazypath,
+  })
+<span class="kw">end</span>
+vim.opt.rtp:prepend(lazypath)
+
+<span class="cmt">-- Options</span>
+vim.opt.number = <span class="kw">true</span>
+vim.opt.relativenumber = <span class="kw">true</span>
+vim.opt.tabstop = <span class="cmd">2</span>
+vim.opt.shiftwidth = <span class="cmd">2</span>
+vim.opt.expandtab = <span class="kw">true</span>
+vim.opt.termguicolors = <span class="kw">true</span>
+
+<span class="cmt">-- Leader key</span>
+vim.g.mapleader = <span class="str">" "</span>
+
+<span class="cmt">-- Plugins</span>
+<span class="fn">require</span>(<span class="str">"lazy"</span>).setup({
+
+  <span class="cmt">-- File navigation (replaces netrw)</span>
+  { <span class="str">"stevearc/oil.nvim"</span>, opts = {} },
+
+  <span class="cmt">-- Git: status, diffs, commits</span>
+  {
+    <span class="str">"NeogitOrg/neogit"</span>,
+    dependencies = {
+      <span class="str">"nvim-lua/plenary.nvim"</span>,
+      <span class="str">"sindrets/diffview.nvim"</span>,
+    },
+    config = <span class="kw">true</span>,
+  },
+
+  <span class="cmt">-- File finding and codebase grepping</span>
+  {
+    <span class="str">"folke/snacks.nvim"</span>,
+    priority = <span class="cmd">1000</span>,
+    lazy = <span class="kw">false</span>,
+    opts = { picker = { enabled = <span class="kw">true</span> } },
+  },
+
+})</div>
+          </div>
+
+          <h3 style="margin-top:26px;">What each plugin does</h3>
+          <table class="kv-table">
+            <tr><th>Plugin</th><th>Role</th></tr>
+            <tr><td class="k">lazy.nvim</td><td>Plugin manager — bootstraps itself on first launch, then installs and loads everything else.</td></tr>
+            <tr><td class="k">oil.nvim</td><td>Browse and edit the filesystem like a buffer. Replaces the built-in netrw file explorer.</td></tr>
+            <tr><td class="k">neogit</td><td>Full git UI inside Neovim — stage, commit, diff, push without leaving the editor.</td></tr>
+            <tr><td class="k">snacks.nvim</td><td>Fuzzy file finder and codebase grep. Find any file or search across the whole project instantly.</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="step">
+        <div class="step-index">04</div>
+        <div class="step-body">
+          <h3>Launch Neovim — plugins install automatically</h3>
+          <p class="step-meta">On the very first launch, lazy.nvim clones itself and then installs all three plugins. No manual steps.</p>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">zsh</span>
+              <button class="term-copy" data-copy="nvim">Copy</button>
+            </div>
+            <div class="term-body"><span class="prompt">➜</span> <span class="cmd">nvim</span>
+<span class="out">  lazy.nvim cloning...
+  Installing oil.nvim ✓
+  Installing neogit ✓
+  Installing snacks.nvim ✓</span></div>
+          </div>
+          <div class="callout success">
+            <span class="callout-icon">✓</span>
+            <span class="callout-text">After the install completes, press <strong>q</strong> to close the lazy.nvim window and you're in the editor.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="step">
+        <div class="step-index">05</div>
+        <div class="step-body">
+          <h3>Essential key bindings</h3>
+          <p class="step-meta">The three plugins, each opened with one command. Leader key is <strong>Space</strong>.</p>
+          <table class="kv-table">
+            <tr><th>Keys</th><th>Action</th></tr>
+            <tr><td class="k">-</td><td>Open <strong>oil.nvim</strong> — browse files in the current directory</td></tr>
+            <tr><td class="k">:Neogit</td><td>Open <strong>neogit</strong> — git status, stage, commit, push</td></tr>
+            <tr><td class="k">:lua Snacks.picker.files()</td><td>Open <strong>snacks</strong> file finder — fuzzy search across the project</td></tr>
+            <tr><td class="k">:lua Snacks.picker.grep()</td><td>Open <strong>snacks</strong> grep — search text across the whole codebase</td></tr>
+            <tr><td class="k">:Lazy</td><td>Open the lazy.nvim UI — update or inspect plugins</td></tr>
+            <tr><td class="k">:q</td><td>Quit Neovim</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="done-banner">
+        <p><strong>Neovim — done.</strong><br>v0.12.3 · lazy.nvim · oil.nvim · neogit · snacks.nvim</p>
+        <div class="term" style="margin:0; width:260px;">
+          <div class="term-bar"><div class="term-btn"></div><span class="term-label">nvim</span></div>
+          <div class="term-body" style="font-size:12px;"><span class="prompt"> </span> <span class="cmd">NVIM v0.12.3</span><span class="cursor"></span></div>
+        </div>
+      </div>
+      </div><!-- /sub-editor -->
+
+    </section>
+
+    <section class="panel" id="panel-whisper">
+      <div class="eyebrow">Productivity · Voice Input</div>
+      <h1>OpenSuperWhisper</h1>
+      <p class="lede">Local speech-to-text on Apple Silicon using OpenAI's Whisper model. No cloud, no subscription — speak anywhere on macOS and the transcription is pasted in place.</p>
+
+      <!-- Step 1 -->
+      <div class="step">
+        <div class="step-index">01</div>
+        <div class="step-body">
+          <h3>Install via Homebrew</h3>
+          <p class="step-meta">Requires Apple Silicon and macOS 14 or later. The app ships as a cask — no CLI tool, just the app bundle.</p>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">zsh</span>
+              <button class="term-copy" data-copy="brew install --cask opensuperwhisper">Copy</button>
+            </div>
+            <div class="term-body"><span class="prompt">➜</span> <span class="cmd">brew install --cask opensuperwhisper</span>
+<span class="out">==> Moving App 'OpenSuperWhisper.app' to '/Applications/OpenSuperWhisper.app'
+🍺  opensuperwhisper was successfully installed!</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step">
+        <div class="step-index">02</div>
+        <div class="step-body">
+          <h3>Download a Whisper model</h3>
+          <p class="step-meta">On first launch the app asks you to pick a model. Transcription runs entirely on-device using these models — nothing is sent to a server.</p>
+          <table class="kv-table">
+            <tr><th>Model</th><th>Description</th><th>Pick if</th></tr>
+            <tr><td class="k">Parakeet v3</td><td>Fastest processing and accurate</td><td>Best default - start here</td></tr>
+            <tr><td class="k">Parakeet v2</td><td>Fastest processing, English-only, higher recall</td><td>English-only and want max speed</td></tr>
+            <tr><td class="k">Whisper Medium</td><td>Balanced speed and accuracy</td><td>Multilingual or mixed content</td></tr>
+            <tr><td class="k">Whisper Small</td><td>Very fast processing</td><td>Low memory, speed over accuracy</td></tr>
+            <tr><td class="k">Whisper V3 Large</td><td>High accuracy, best quality</td><td>Long-form dictation, highest accuracy needed</td></tr>
+          </table>
+          <div class="callout info">
+            <span class="callout-icon">i</span>
+            <span class="callout-text">Download only one to start — <strong>Parakeet v3</strong> is the best default for everyday use on Apple Silicon. You can switch models any time from the same screen.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step">
+        <div class="step-index">03</div>
+        <div class="step-body">
+          <h3>Grant microphone &amp; accessibility permissions</h3>
+          <p class="step-meta">Two permissions are required. macOS will prompt for both on first use — grant them from System Settings if the prompts don't appear.</p>
+          <table class="kv-table">
+            <tr><th>Permission</th><th>Why it's needed</th></tr>
+            <tr><td class="k">Microphone</td><td>To capture your voice while recording</td></tr>
+            <tr><td class="k">Accessibility</td><td>To paste the transcription into whichever app is in focus</td></tr>
+          </table>
+          <div class="callout info">
+            <span class="callout-icon">i</span>
+            <span class="callout-text">System Settings → Privacy &amp; Security → Accessibility → enable OpenSuperWhisper. Without this the text is transcribed but cannot be auto-pasted.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="step">
+        <div class="step-index">04</div>
+        <div class="step-body">
+          <h3>How to use it</h3>
+          <p class="step-meta">Works in any app — terminal, browser, editor, chat. No mode switching or copy-paste needed.</p>
+          <table class="kv-table">
+            <tr><th>Action</th><th>What happens</th></tr>
+            <tr><td class="k">Hold <strong>Right ⌥ Option</strong></td><td>Recording starts — speak while holding the key</td></tr>
+            <tr><td class="k">Release <strong>Right ⌥ Option</strong></td><td>Whisper transcribes locally, text is pasted at cursor</td></tr>
+            <tr><td class="k">Change shortcut</td><td>App preferences → Shortcut — can switch between Left ⌥ and Right ⌥</td></tr>
+          </table>
+          <div class="callout success">
+            <span class="callout-icon">✓</span>
+            <span class="callout-text"><strong>Practical use:</strong> hold the shortcut, say a long prompt to Claude Code, release — the full text appears in the terminal. Faster than typing long agent instructions.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="done-banner">
+        <p><strong>OpenSuperWhisper — installed.</strong><br>Local Whisper · on-device · pastes at cursor</p>
+        <div class="term" style="margin:0; width:260px;">
+          <div class="term-bar"><div class="term-btn"></div><span class="term-label">OpenSuperWhisper 0.1.0</span></div>
+          <div class="term-body" style="font-size:12px;"><span class="prompt">◎</span> <span class="cmd">listening...</span><span class="cursor"></span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-claude-code">
+      <div class="eyebrow">Agentic Tooling</div>
+      <h1>Claude Code Setup</h1>
+
+      <div class="sub-tabs">
+        <button class="sub-tab active" data-sub="global">Global Setup <span class="sub-tag">one-time</span></button>
+        <button class="sub-tab" data-sub="project">Project Level <span class="sub-tag">per project</span></button>
+      </div>
+
+      <!-- ===== GLOBAL SUB-TAB ===== -->
+      <div class="sub-panel active" id="sub-global">
+      <p class="lede">One-time setup on your machine. Do this once — every project you work on will inherit these settings automatically.</p>
+
+      <!-- Step 1 -->
+      <div class="step">
+        <div class="step-index">01</div>
+        <div class="step-body">
+          <h3>Install Claude Code</h3>
+          <p class="step-meta">Via npm. Installs the <code>claude</code> CLI globally.</p>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">zsh</span>
+              <button class="term-copy" data-copy="npm install -g @anthropic-ai/claude-code">Copy</button>
+            </div>
+            <div class="term-body"><span class="prompt">➜</span> <span class="cmd">npm install -g @anthropic-ai/claude-code</span></div>
+          </div>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">zsh</span>
+              <button class="term-copy" data-copy="claude --version">Copy</button>
+            </div>
+            <div class="term-body"><span class="prompt">➜</span> <span class="cmd">claude --version</span>
+<span class="cmt"># confirms the CLI is on your PATH</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step">
+        <div class="step-index">02</div>
+        <div class="step-body">
+          <h3>Agent instruction file structure</h3>
+          <p class="step-meta">There are two levels of global instruction files. Both are read automatically — no config needed.</p>
+          <table class="kv-table">
+            <tr><th>File</th><th>Scope</th></tr>
+            <tr><td class="k">~/AGENTS.md</td><td>Universal — works across Claude Code, OpenCode, and any other agent harness</td></tr>
+            <tr><td class="k">~/.claude/CLAUDE.md</td><td>Claude Code specific — supplements AGENTS.md with Claude-only preferences</td></tr>
+            <tr><td class="k">./CLAUDE.md</td><td>Project — checked into git, shared with the team</td></tr>
+            <tr><td class="k">./CLAUDE.local.md</td><td>Project personal — gitignored, your own per-project overrides</td></tr>
+          </table>
+          <div class="callout info">
+            <span class="callout-icon">i</span>
+            <span class="callout-text"><strong>Keep both files short.</strong> For every line ask: <em>"Would removing this cause the agent to make mistakes?"</em> If not, cut it. Bloated instruction files get ignored.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step">
+        <div class="step-index">03</div>
+        <div class="step-body">
+          <h3>Write ~/AGENTS.md</h3>
+          <p class="step-meta">The primary global file. Placed at the home directory so every agent harness picks it up automatically — not just Claude Code.</p>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">~/AGENTS.md</span>
+              <button class="term-copy" data-copy="# Manjesh's agent instructions&#10;&#10;These are common instructions for Manjesh's agents across all scenarios.&#10;&#10;## General Guidelines&#10;&#10;- Never use the em dash &quot;—&quot;. Use plain dash &quot;-&quot; instead.&#10;- When writing commit messages, NEVER auto-add your agent name as co-author.&#10;- Never manually modify CHANGELOG.md files or any files that are marked as auto-generated.&#10;- When writing or substantially editing long Markdown files, put each full sentence on its own line.&#10;  Preserve normal Markdown structure, but avoid wrapping multiple sentences onto one physical line.&#10;- When making technical decisions, do not give much weight to development cost.&#10;  Instead, prefer quality, simplicity, robustness, scalability, and long term maintainability.&#10;- When doing bug fixes, always start with reproducing the bug in an E2E setting as closely aligned with how an end user would experience it.&#10;  This makes sure you find the real problem so your fix will actually solve it.&#10;- When end-to-end testing a product, be picky about the UI you see and be obsessed with pixel perfection.&#10;  If something clearly looks off, even if it is not directly related to what you are doing, try to get it fixed alongside the current task.&#10;- Apply that same high standard to engineering excellence: lint, test failures, and test flakiness.&#10;  If you see one, even if it is not caused by what you are working on right now, still get it fixed.&#10;&#10;## Manjesh's Opinions&#10;&#10;When you are working on something that would benefit from being informed by Manjesh's viewpoints, read ~/OPINIONS.md to understand his perspective.&#10;&#10;## Voice Profile&#10;&#10;When you are talking/posting on behalf of Manjesh using his identity, read ~/VOICE.md to see how Manjesh talks.">Copy</button>
+            </div>
+            <div class="term-body"><span class="cmt"># Manjesh's agent instructions</span>
+
+These are common instructions for Manjesh's agents across all scenarios.
+
+<span class="kw">## General Guidelines</span>
+
+<span class="out">- Never use the em dash "—". Use plain dash "-" instead.
+- When writing commit messages, NEVER auto-add your agent name as co-author.
+- Never manually modify CHANGELOG.md files or any files marked as auto-generated.
+- When writing or substantially editing long Markdown files, put each full
+  sentence on its own line. Avoid wrapping multiple sentences onto one line.
+- When making technical decisions, do not give much weight to development cost.
+  Instead, prefer quality, simplicity, robustness, scalability, and long term maintainability.
+- When doing bug fixes, always start with reproducing the bug in an E2E setting
+  as closely aligned with how an end user would experience it.
+- When end-to-end testing a product, be picky about the UI and be obsessed with
+  pixel perfection. If something looks off, try to get it fixed alongside the current task.
+- Apply that same high standard to engineering excellence: lint, test failures,
+  and test flakiness. If you see one, still get it fixed.</span>
+
+<span class="kw">## Manjesh's Opinions</span>
+
+<span class="out">When you are working on something that would benefit from being informed by
+Manjesh's viewpoints, read ~/OPINIONS.md to understand his perspective.</span>
+
+<span class="kw">## Voice Profile</span>
+
+<span class="out">When you are talking/posting on behalf of Manjesh using his identity,
+read ~/VOICE.md to see how Manjesh talks.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="step">
+        <div class="step-index">04</div>
+        <div class="step-body">
+          <h3>Symlink ~/.claude/CLAUDE.md to ~/AGENTS.md</h3>
+          <p class="step-meta">Instead of maintaining two files, create a symlink — <code>~/.claude/CLAUDE.md</code> points to <code>~/AGENTS.md</code>. Edit one file, both agents see the same content automatically.</p>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">~/.claude/CLAUDE.md</span>
+              <button class="term-copy" data-copy="ln -s ~/AGENTS.md ~/.claude/CLAUDE.md">Copy</button>
+            </div>
+            <div class="term-body"><span class="prompt">➜</span> <span class="cmd">ln -s ~/AGENTS.md ~/.claude/CLAUDE.md</span>
+<span class="cmt"># verify it</span>
+<span class="prompt">➜</span> <span class="cmd">ls -la ~/.claude/CLAUDE.md</span>
+<span class="out">lrwxr-xr-x  ~/.claude/CLAUDE.md -> /Users/manjesh/AGENTS.md</span></div>
+          </div>
+
+          <div class="callout success">
+            <span class="callout-icon">✓</span>
+            <span class="callout-text"><strong>One file, two names.</strong> Claude Code reads <code>~/.claude/CLAUDE.md</code>, other agents read <code>~/AGENTS.md</code> — both resolve to the same file. Edit <code>~/AGENTS.md</code> and the change is instantly visible to all agents.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="step">
+        <div class="step-index">05</div>
+        <div class="step-body">
+          <h3>Full file structure on disk</h3>
+          <p class="step-meta">Everything in one view — where each file lives and what it covers.</p>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">home directory layout</span>
+            </div>
+            <div class="term-body"><span class="out">~/
+├── AGENTS.md          </span><span class="cmt"># universal agent instructions (all harnesses)</span>
+<span class="out">├── OPINIONS.md        </span><span class="cmt"># personal viewpoints — referenced by AGENTS.md</span>
+<span class="out">├── VOICE.md           </span><span class="cmt"># writing voice — referenced by AGENTS.md</span>
+<span class="out">└── .claude/
+    └── CLAUDE.md      </span><span class="cmt"># Claude Code specific additions</span>
+
+<span class="out">~/.config/
+├── wezterm/
+│   └── wezterm.lua
+├── tmux/
+│   └── tmux.conf
+└── nvim/
+    └── init.lua</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 6 -->
+      <div class="step">
+        <div class="step-index">06</div>
+        <div class="step-body">
+          <h3>The agentic workflow loop</h3>
+          <p class="step-meta">The repeatable cycle for every task — plan, implement, validate, ship.</p>
+          <table class="kv-table">
+            <tr><th>Phase</th><th>What happens</th></tr>
+            <tr><td class="k">1. Plan</td><td>Describe the task. Claude explores the codebase and creates an implementation plan before touching any code.</td></tr>
+            <tr><td class="k">2. Implement</td><td>Claude codes against the plan. You watch, redirect, or step away.</td></tr>
+            <tr><td class="k">3. Validate</td><td>Claude runs tests, shows evidence. A second Claude session reviews the diff in a fresh context.</td></tr>
+            <tr><td class="k">4. Ship</td><td>Claude commits with a conventional message and opens a PR via <code>gh</code>.</td></tr>
+          </table>
+          <div class="callout info">
+            <span class="callout-icon">i</span>
+            <span class="callout-text">Run <strong>/clear</strong> between unrelated tasks to reset context. Long sessions with irrelevant history reduce Claude's accuracy.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 7 -->
+      <div class="step">
+        <div class="step-index">07</div>
+        <div class="step-body">
+          <h3>Essential Claude Code commands</h3>
+          <table class="kv-table">
+            <tr><th>Command</th><th>What it does</th></tr>
+            <tr><td class="k">claude</td><td>Start an interactive session in the current directory</td></tr>
+            <tr><td class="k">claude -p "prompt"</td><td>One-shot non-interactive run — useful in scripts and CI</td></tr>
+            <tr><td class="k">/clear</td><td>Reset context window — run between unrelated tasks</td></tr>
+            <tr><td class="k">/init</td><td>Generate a starter CLAUDE.md for the current project</td></tr>
+            <tr><td class="k">/compact</td><td>Summarise conversation to free up context</td></tr>
+            <tr><td class="k">Esc</td><td>Stop Claude mid-action — context preserved, you can redirect</td></tr>
+            <tr><td class="k">Esc Esc</td><td>Open rewind menu — restore code and conversation to any checkpoint</td></tr>
+          </table>
+        </div>
+      </div>
+
+      </div><!-- /sub-global -->
+
+      <!-- ===== PROJECT LEVEL SUB-TAB ===== -->
+      <div class="sub-panel" id="sub-project">
+      <p class="lede">Repeat this for every new project. Checked into git so the agent always has full context — content changes per project, structure stays the same.</p>
+
+      <!-- Step 1 (project) -->
+      <div class="step">
+        <div class="step-index">01</div>
+        <div class="step-body">
+          <h3>Project-level AGENTS.md</h3>
+          <p class="step-meta">Every project gets its own <code>AGENTS.md</code> at the repo root. The global <code>~/AGENTS.md</code> sets your personal rules — this file tells the agent what <em>this specific codebase</em> is. Both are read together every session.</p>
+
+          <div class="callout info">
+            <span class="callout-icon">i</span>
+            <span class="callout-text">The global <code>~/AGENTS.md</code> sets your personal rules. The project <code>./AGENTS.md</code> tells the agent what this specific codebase is. Both are read together every session — the agent combines them automatically.</span>
+          </div>
+
+          <h3 style="margin-top:22px;">Full template — copy for every new Python/FastAPI project</h3>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">./AGENTS.md — project root</span>
+              <button class="term-copy" data-copy="# agent instructions&#10;&#10;## What this project is&#10;&#10;&lt;Plain English description of what the service does and who it is for.&#10;Include what endpoints exist, what data flows through them, and any&#10;non-obvious infrastructure constraints.&#10;Write this as if briefing a new engineer on their first day.&gt;&#10;&#10;This file is the canonical architecture and workflow guide for this project.&#10;&#10;## Stack and layout&#10;&#10;- Python 3.x, FastAPI, uvicorn&#10;- main.py       - app entry point, FastAPI instance&#10;- routers/      - one file per feature / route group&#10;- models/       - Pydantic models and schemas&#10;- services/     - business logic, called by routers&#10;- tests/        - pytest test files&#10;- .env          - local env vars (never commit)&#10;&#10;## How to run&#10;&#10;- uv pip install -r requirements.txt   # install deps&#10;- uvicorn main:app --reload            # start dev server (http://localhost:8000)&#10;- pytest                               # run all tests&#10;- ruff check . &amp;&amp; ruff format .        # lint and format&#10;&#10;## E2E testing&#10;&#10;The API is the surface. Proving a change works means hitting the real running&#10;server with real HTTP requests and checking the response.&#10;&#10;- Before an E2E pass, write down the one endpoint behaviour to prove.&#10;- Keep the pass narrow — one route, one scenario.&#10;- Repeatable checks belong in pytest, not manual curl steps.&#10;&#10;### Start the server&#10;&#10;uvicorn main:app --reload &amp;&#10;&#10;Wait for it to be ready:&#10;until curl -s http://localhost:8000/health; do sleep 1; done&#10;&#10;### What E2E can and cannot cover&#10;&#10;Can:&#10;- HTTP request/response correctness (status codes, body, headers)&#10;- Behaviour differences between valid and invalid inputs&#10;- Side effects visible via subsequent GET requests&#10;&#10;Cannot:&#10;- Internal async task state not exposed via an endpoint&#10;- Third-party service calls (mock or skip in E2E)&#10;&#10;## Project conventions&#10;&#10;- Package manager: uv (lockfile is uv.lock) or pip with requirements.txt.&#10;- Tests: pytest. Lint/format: ruff check . &amp;&amp; ruff format .&#10;- Test files live in tests/ mirroring the source layout.&#10;- TDD is expected for bug fixes and new features.&#10;- Do not auto-add an AI co-author to commits.&#10;- Never commit .env files or secrets.&#10;&#10;## One-time understanding&#10;&#10;&lt;Non-obvious env vars, credential locations, infra quirks, or anything&#10;that would surprise a new engineer. Remove entries once they are no longer true.&gt;&#10;&#10;- Copy .env.example to .env and fill in values before running locally.">Copy</button>
+            </div>
+            <div class="term-body"><span class="cmt"># agent instructions</span>
+
+<span class="kw">## What this project is</span>
+
+<span class="out">&lt;Plain English description of what the service does and who it is for.
+Include what endpoints exist, what data flows through them, and any
+non-obvious infrastructure constraints.
+Write this as if briefing a new engineer on their first day.&gt;
+
+This file is the canonical architecture and workflow guide for this project.</span>
+
+<span class="kw">## Stack and layout</span>
+
+<span class="out">- Python 3.x, FastAPI, uvicorn
+- main.py       - app entry point, FastAPI instance
+- routers/      - one file per feature / route group
+- models/       - Pydantic models and schemas
+- services/     - business logic, called by routers
+- tests/        - pytest test files
+- .env          - local env vars (never commit)</span>
+
+<span class="kw">## How to run</span>
+
+<span class="out">- uv pip install -r requirements.txt   </span><span class="cmt"># install deps</span>
+<span class="out">- uvicorn main:app --reload            </span><span class="cmt"># http://localhost:8000</span>
+<span class="out">- pytest                               </span><span class="cmt"># run all tests</span>
+<span class="out">- ruff check . &amp;&amp; ruff format .        </span><span class="cmt"># lint and format</span>
+
+<span class="kw">## E2E testing</span>
+
+<span class="out">The API is the surface. Proving a change works means hitting the real
+running server with real HTTP requests and checking the response.
+
+- Before an E2E pass, write down the one endpoint behaviour to prove.
+- Keep the pass narrow - one route, one scenario.
+- Repeatable checks belong in pytest, not manual curl steps.</span>
+
+<span class="kw">### Start the server</span>
+
+<span class="out">uvicorn main:app --reload &amp;
+
+Wait for it to be ready:
+  until curl -s http://localhost:8000/health; do sleep 1; done</span>
+
+<span class="kw">### What E2E can and cannot cover</span>
+
+<span class="out">Can:
+- HTTP request/response correctness (status codes, body, headers)
+- Behaviour differences between valid and invalid inputs
+- Side effects visible via subsequent GET requests
+
+Cannot:
+- Internal async task state not exposed via an endpoint
+- Third-party service calls (mock or skip in E2E)</span>
+
+<span class="kw">## Project conventions</span>
+
+<span class="out">- Package manager: uv (lockfile is uv.lock) or pip with requirements.txt.
+- Tests: pytest. Lint/format: ruff check . &amp;&amp; ruff format .
+- Test files live in tests/ mirroring the source layout.
+- TDD expected for bug fixes and new features.
+- Do not auto-add an AI co-author to commits.
+- Never commit .env files or secrets.</span>
+
+<span class="kw">## One-time understanding</span>
+
+<span class="out">&lt;Non-obvious env vars, credential locations, infra quirks.
+Remove entries once they are no longer true.&gt;
+
+- Copy .env.example to .env and fill in values before running locally.</span></div>
+          </div>
+
+          <div class="callout warn" style="margin: 0 0 20px 0;">
+            <span class="callout-icon">!</span>
+            <span class="callout-text"><strong>TODO - move E2E instructions to a skill.</strong> The E2E testing section in the project AGENTS.md loads on every request, burning tokens even when you are not testing. Extract it into a dedicated <code>~/.agents/skills/e2e-testing/SKILL.md</code> so it only loads when you ask for it.</span>
+          </div>
+
+          <h3 style="margin-top:26px;">What each section does</h3>
+          <table class="kv-table">
+            <tr><th>Section</th><th>Purpose</th><th>Required?</th></tr>
+            <tr><td class="k">What this project is</td><td>Full context on the service before the agent touches any code — purpose, endpoints, data flow, infrastructure constraints.</td><td>Always</td></tr>
+            <tr><td class="k">Stack and layout</td><td>Python/FastAPI folder map so the agent knows where routers, models, services, and tests live without exploring blindly.</td><td>Always</td></tr>
+            <tr><td class="k">Key terminology</td><td>Only needed if the project has domain-specific words that must stay consistent. Skip if not applicable.</td><td>If applicable</td></tr>
+            <tr><td class="k">How to run</td><td>uv/pip install, uvicorn start, pytest, ruff — so the agent can run and verify the service on its own.</td><td>Always</td></tr>
+            <tr><td class="k">E2E testing</td><td>Prove a change works by hitting the real running server with curl or httpx. Without this, "looks done" is the only signal.</td><td>Always</td></tr>
+            <tr><td class="k">E2E - Start the server</td><td>How to start uvicorn in the background and poll until the health endpoint is up before testing.</td><td>Always</td></tr>
+            <tr><td class="k">E2E - Can / can't cover</td><td>Scopes what the agent can prove via HTTP (status, body, side effects) vs what it cannot (async internals, third-party calls).</td><td>Always</td></tr>
+            <tr><td class="k">Project conventions</td><td>uv/pip, pytest, ruff — keeps the agent from using the wrong tool, skipping tests, or committing secrets.</td><td>Always</td></tr>
+            <tr><td class="k">One-time understanding</td><td>Non-obvious env vars, .env setup, infra quirks. Remove entries once stale.</td><td>As needed</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="done-banner">
+        <p><strong>Project context — ready.</strong><br>./AGENTS.md committed · agent has full context</p>
+        <div class="term" style="margin:0; width:260px;">
+          <div class="term-bar"><div class="term-btn"></div><span class="term-label">project root</span></div>
+          <div class="term-body" style="font-size:12px;"><span class="out">./AGENTS.md</span><span class="cursor"></span></div>
+        </div>
+      </div>
+
+      </div><!-- /sub-project -->
+
+      <div class="done-banner" id="cc-global-done" style="display:block;">
+        <p><strong>Claude Code — set up.</strong><br>~/AGENTS.md · ~/.claude/CLAUDE.md · agentic loop ready</p>
+        <div class="term" style="margin:0; width:260px;">
+          <div class="term-bar"><div class="term-btn"></div><span class="term-label">claude</span></div>
+          <div class="term-body" style="font-size:12px;"><span class="prompt">➜</span> <span class="cmd">claude</span><span class="cursor"></span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-skills">
+      <div class="eyebrow">Agentic Tooling</div>
+      <h1>Skills &amp; Plugins</h1>
+      <p class="lede">Skills extend Claude Code with reusable workflows and domain knowledge. Installed globally with <code>npx skills</code> — they live at <code>~/.agents/skills/</code> and are symlinked into Claude Code automatically.</p>
+
+      <!-- Step 1 -->
+      <div class="step">
+        <div class="step-index">01</div>
+        <div class="step-body">
+          <h3>How skills work</h3>
+          <p class="step-meta">A skill is a <code>SKILL.md</code> file that Claude reads when the task matches. It gives Claude domain knowledge and a repeatable workflow — without you having to re-explain the same process every session.</p>
+          <table class="kv-table">
+            <tr><th>Location</th><th>Scope</th></tr>
+            <tr><td class="k">~/.agents/skills/</td><td>Global — available in every project</td></tr>
+            <tr><td class="k">.claude/skills/</td><td>Project — only loaded for that repo</td></tr>
+          </table>
+          <div class="callout info">
+            <span class="callout-icon">i</span>
+            <span class="callout-text">Skills are symlinked from <code>~/.agents/skills/</code> into <code>~/.claude/skills/</code> automatically. Edit the source in <code>~/.agents/</code> — the change is instantly live in Claude Code.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step">
+        <div class="step-index">02</div>
+        <div class="step-body">
+          <h3>Install the skill-creator skill</h3>
+          <p class="step-meta">The first skill to install — it lets you create, test, and iterate on new skills from inside Claude Code. Installed globally with <code>-g</code> so it works in every project.</p>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">zsh</span>
+              <button class="term-copy" data-copy="npx skills add anthropics/skills --skill skill-creator -g">Copy</button>
+            </div>
+            <div class="term-body"><span class="prompt">➜</span> <span class="cmd">npx skills add anthropics/skills --skill skill-creator -g</span>
+<span class="out">◇  Repository cloned
+◇  Found 18 skills
+●  Selected 1 skill: skill-creator
+◇  Installation complete
+✓  ~/.agents/skills/skill-creator  (symlinked → Claude Code)</span></div>
+          </div>
+          <div class="callout success">
+            <span class="callout-icon">✓</span>
+            <span class="callout-text">Skill installs to <code>~/.agents/skills/skill-creator/</code> and is symlinked into Claude Code. Review skills before use — they run with full agent permissions.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step">
+        <div class="step-index">03</div>
+        <div class="step-body">
+          <h3>What skill-creator does</h3>
+          <p class="step-meta">A meta-skill for building other skills. It guides you through the full creation loop inside Claude Code.</p>
+          <table class="kv-table">
+            <tr><th>Stage</th><th>What happens</th></tr>
+            <tr><td class="k">1. Draft</td><td>Describe what you want the skill to do — Claude writes a first version of the SKILL.md.</td></tr>
+            <tr><td class="k">2. Test</td><td>Write a few test prompts and run Claude against them to see how the skill behaves.</td></tr>
+            <tr><td class="k">3. Evaluate</td><td>Review results qualitatively (does it do the right thing?) and quantitatively (pass/fail metrics).</td></tr>
+            <tr><td class="k">4. Iterate</td><td>Rewrite the skill based on what the evals revealed. Repeat until satisfied.</td></tr>
+            <tr><td class="k">5. Optimise</td><td>Run the description improver script to make the skill trigger more reliably.</td></tr>
+          </table>
+          <div class="callout info">
+            <span class="callout-icon">i</span>
+            <span class="callout-text">Invoke it by telling Claude what skill you want to build: <em>"I want to make a skill for reviewing FastAPI routes."</em> Claude handles the rest.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="step">
+        <div class="step-index">04</div>
+        <div class="step-body">
+          <h3>Installing more skills</h3>
+          <p class="step-meta">Same command, different skill name. Browse available skills at the Anthropic skills repo.</p>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">zsh</span>
+              <button class="term-copy" data-copy="npx skills add anthropics/skills --skill <skill-name> -g">Copy</button>
+            </div>
+            <div class="term-body"><span class="prompt">➜</span> <span class="cmd">npx skills add anthropics/skills --skill &lt;skill-name&gt; -g</span>
+<span class="cmt"># list all available skills</span>
+<span class="prompt">➜</span> <span class="cmd">ls ~/.agents/skills/</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="done-banner">
+        <p><strong>Skills — set up.</strong><br>skill-creator installed · ~/.agents/skills/ · symlinked into Claude Code</p>
+        <div class="term" style="margin:0; width:260px;">
+          <div class="term-bar"><div class="term-btn"></div><span class="term-label">~/.agents/skills/</span></div>
+          <div class="term-body" style="font-size:12px;"><span class="prompt">➜</span> <span class="cmd">skill-creator</span><span class="cursor"></span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-lavish">
+      <div class="eyebrow">Agentic Tooling</div>
+      <h1>Lavish</h1>
+      <p class="lede">HTML is the new Markdown. Lavish turns agent-generated HTML artifacts into interactive review surfaces — annotate elements, queue prompts, and send feedback back to the agent without leaving the browser.</p>
+
+      <!-- Step 1 -->
+      <div class="step">
+        <div class="step-index">01</div>
+        <div class="step-body">
+          <h3>Install via npm</h3>
+          <p class="step-meta">Installed globally so it's available in every project. Requires Node 22+ — upgrade Node first, then install lavish.</p>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">zsh</span>
+              <button class="term-copy" data-copy="npm install -g lavish-axi">Copy</button>
+            </div>
+            <div class="term-body"><span class="prompt">➜</span> <span class="cmd">npm install -g lavish-axi</span>
+<span class="out">added 84 packages in 3s</span>
+<span class="prompt">➜</span> <span class="cmd">lavish-axi --version</span>
+<span class="out">0.1.35</span></div>
+          </div>
+          <div class="callout info">
+            <span class="callout-icon">i</span>
+            <span class="callout-text"><strong>Node version order matters.</strong> Always upgrade Node first, then install lavish — global npm packages don't carry across nvm versions. After switching Node, reinstall with <code>npm install -g lavish-axi</code>.</span>
+          </div>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">zsh — upgrade Node first</span>
+              <button class="term-copy" data-copy="nvm install 22 && nvm use 22 && nvm alias default 22 && npm install -g lavish-axi">Copy</button>
+            </div>
+            <div class="term-body"><span class="prompt">➜</span> <span class="cmd">nvm install 22 && nvm use 22 && nvm alias default 22</span>
+<span class="out">Now using node v22.23.1 (npm v10.9.8)
+default -> 22 (-> v22.23.1 *)</span>
+<span class="prompt">➜</span> <span class="cmd">npm install -g lavish-axi</span>
+<span class="out">added 84 packages in 3s</span>
+<span class="prompt">➜</span> <span class="cmd">lavish-axi --version</span>
+<span class="out">0.1.35</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step">
+        <div class="step-index">02</div>
+        <div class="step-body">
+          <h3>How it fits into the agentic workflow</h3>
+          <p class="step-meta">Instead of reading a wall of text, Lavish opens the agent's response as a live webpage you can annotate and reply from.</p>
+          <table class="kv-table">
+            <tr><th>Command</th><th>What it does</th></tr>
+            <tr><td class="k">lavish-axi &lt;file.html&gt;</td><td>Serves the HTML locally and opens it in the browser for review</td></tr>
+            <tr><td class="k">lavish-axi poll &lt;file.html&gt;</td><td>Waits silently for your feedback or annotations from the browser</td></tr>
+            <tr><td class="k">lavish-axi end &lt;file.html&gt;</td><td>Agent ends the session — can be reopened later</td></tr>
+            <tr><td class="k">lavish-axi export &lt;file.html&gt;</td><td>Writes a portable self-contained HTML file with all assets inlined</td></tr>
+            <tr><td class="k">lavish-axi share &lt;file.html&gt;</td><td>Publishes to ht-ml.app and returns a public URL</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step">
+        <div class="step-index">03</div>
+        <div class="step-body">
+          <h3>When the agent uses Lavish</h3>
+          <p class="step-meta">This preference is written into <code>~/AGENTS.md</code> so every agent session picks it up automatically.</p>
+          <div class="callout success">
+            <span class="callout-icon">✓</span>
+            <span class="callout-text"><strong>Default behaviour:</strong> whenever you ask to plan, discuss options, or review trade-offs, the agent creates an HTML artifact and opens it in Lavish — no need to ask. Say <strong>"no lavish"</strong> or ask for a <strong>Markdown file</strong> to get plain text instead.</span>
+          </div>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">~/AGENTS.md — Planning and Discussion section</span>
+            </div>
+            <div class="term-body"><span class="kw">## Planning and Discussion</span>
+
+<span class="out">When asked to plan, discuss options, explain trade-offs, or present
+anything complex, use lavish as the first choice.
+Create an HTML artifact and open it with `lavish-axi &lt;file&gt;` so Manjesh
+can visually review and annotate it.
+Only skip lavish if Manjesh explicitly asks for a Markdown file or says
+"no lavish".</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="step">
+        <div class="step-index">04</div>
+        <div class="step-body">
+          <h3>Artifact location</h3>
+          <p class="step-meta">By default Lavish creates artifacts under <code>.lavish/</code> in the current working directory. Assets referenced by the HTML must be in the same folder — use relative paths, never absolute.</p>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">project layout</span>
+            </div>
+            <div class="term-body"><span class="out">.lavish/
+└── &lt;artifact-name&gt;.html  </span><span class="cmt"># agent-generated artifact</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-index">05</div>
+        <div class="step-body">
+          <h3>References</h3>
+          <p class="step-meta">Official docs and source. <code>axi.md</code> is the canonical reference — all playbooks, commands, and design guidance live there.</p>
+          <table class="kv-table">
+            <tr><th>Resource</th><th>What's there</th></tr>
+            <tr><td class="k"><a href="https://axi.md/" target="_blank" style="color:var(--gold);text-decoration:none;">axi.md</a></td><td>Official docs — playbooks, commands, design guidance, full lavish-axi reference</td></tr>
+            <tr><td class="k"><a href="https://github.com/kunchenguid/lavish-axi" target="_blank" style="color:var(--gold);text-decoration:none;">github/lavish-axi</a></td><td>Source code, releases, issue tracker</td></tr>
+            <tr><td class="k"><a href="https://www.youtube.com/watch?v=iQyg-KypKAA" target="_blank" style="color:var(--gold);text-decoration:none;">Kun Chen — YouTube</a></td><td>Agentic engineering workflow video this entire setup is based on (ex-Meta L8)</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="done-banner">
+        <p><strong>Lavish — installed.</strong><br>v0.1.35 · HTML artifacts · annotate in browser · feedback to agent</p>
+        <div class="term" style="margin:0; width:260px;">
+          <div class="term-bar"><div class="term-btn"></div><span class="term-label">lavish-axi</span></div>
+          <div class="term-body" style="font-size:12px;"><span class="prompt">➜</span> <span class="cmd">lavish-axi plan.html</span><span class="cursor"></span></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  // ── Panel navigation ──
+  const navItems = document.querySelectorAll('.nav-item');
+  const panels = document.querySelectorAll('.panel');
+
+  navItems.forEach(item => {
+    // inject install dot into button
+    const dot = document.createElement('span');
+    dot.className = 'install-dot';
+    item.querySelector('button').appendChild(dot);
+
+    item.querySelector('button').addEventListener('click', () => {
+      navItems.forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+      const target = item.getAttribute('data-target');
+      panels.forEach(p => p.classList.remove('active'));
+      const panel = document.getElementById('panel-' + target);
+      if(panel) panel.classList.add('active');
+    });
+  });
+
+  // ── Sub-tab switching ──
+  document.querySelectorAll('.sub-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const panel = tab.closest('.panel');
+      panel.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
+      panel.querySelectorAll('.sub-panel').forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      const target = tab.getAttribute('data-sub');
+      const subPanel = panel.querySelector('#sub-' + target);
+      if(subPanel) subPanel.classList.add('active');
+      const globalDone = document.getElementById('cc-global-done');
+      if(globalDone) globalDone.style.display = target === 'global' ? 'block' : 'none';
+    });
+  });
+
+  // ── Step progress (click step number to toggle done) ──
+  function stepKey(step) {
+    const panel = step.closest('.panel');
+    const panelId = panel ? panel.id : 'unknown';
+    const siblings = Array.from(panel.querySelectorAll('.step'));
+    return panelId + '-step-' + siblings.indexOf(step);
+  }
+
+  function updateNavDot(panelId) {
+    const panel = document.getElementById(panelId);
+    if (!panel) return;
+    const steps = panel.querySelectorAll('.step');
+    if (steps.length === 0) return;
+    const allDone = Array.from(steps).every(s => s.classList.contains('done'));
+    const navItem = document.querySelector(`.nav-item[data-target="${panelId.replace('panel-', '')}"]`);
+    if (navItem) navItem.classList.toggle('all-done', allDone);
+  }
+
+  document.querySelectorAll('.step').forEach(step => {
+    const key = stepKey(step);
+    // restore from localStorage
+    if (localStorage.getItem(key) === '1') step.classList.add('done');
+
+    step.querySelector('.step-index').addEventListener('click', () => {
+      step.classList.toggle('done');
+      localStorage.setItem(key, step.classList.contains('done') ? '1' : '0');
+      const panel = step.closest('.panel');
+      if (panel) updateNavDot(panel.id);
+    });
+  });
+
+  // init all nav dots on load
+  document.querySelectorAll('.panel').forEach(p => updateNavDot(p.id));
+
+  // ── Copy buttons ──
+  document.querySelectorAll('.term-copy').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const text = btn.getAttribute('data-copy');
+      navigator.clipboard.writeText(text).then(() => {
+        const original = btn.textContent;
+        btn.textContent = '✓ Copied';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = original;
+          btn.classList.remove('copied');
+        }, 1400);
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
