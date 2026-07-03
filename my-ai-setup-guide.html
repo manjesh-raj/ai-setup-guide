@@ -2265,36 +2265,110 @@ clean PR, opened for you</span></div>
             <li>GitHub CLI with auth (used for no-mistakes init)</li>
           </ul>
 
-          <p style="margin-top:1.25rem">Firstmate also installs four companion tools on first launch. Each is part of the <a href="https://axi.md" target="_blank">AXI ecosystem</a> — token-efficient agent interfaces designed to reduce cost and improve reliability over raw CLIs or MCP servers.</p>
+          <p style="margin-top:1.25rem">Firstmate also needs four companion tools from the <a href="https://axi.md" target="_blank">AXI ecosystem</a>. On first launch, firstmate detects what is missing and offers to install them — select <strong>Install all (Recommended)</strong>. To install manually:</p>
 
-          <table style="width:100%;border-collapse:collapse;font-size:0.92rem;margin-top:0.75rem">
-            <thead>
-              <tr style="border-bottom:1px solid var(--border)">
-                <th style="text-align:left;padding:0.5rem 0.75rem;font-weight:600;color:var(--subtle)">Tool</th>
-                <th style="text-align:left;padding:0.5rem 0.75rem;font-weight:600;color:var(--subtle)">What it does</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr style="border-bottom:1px solid var(--border)">
-                <td style="padding:0.6rem 0.75rem"><a href="https://github.com/kunchenguid/treehouse" target="_blank"><strong>treehouse</strong></a></td>
-                <td style="padding:0.6rem 0.75rem">Manages a pool of reusable, isolated git worktrees. Each crewmate gets its own clean environment instantly with dependencies and build cache intact — no re-cloning between tasks</td>
-              </tr>
-              <tr style="border-bottom:1px solid var(--border)">
-                <td style="padding:0.6rem 0.75rem"><a href="https://github.com/kunchenguid/gh-axi" target="_blank"><strong>gh-axi</strong></a></td>
-                <td style="padding:0.6rem 0.75rem">GitHub CLI wrapper optimized for agents — token-efficient TOON output, contextual next-step hints, and structured errors. 100% task success vs 86% for raw <code>gh</code>, at lower cost</td>
-              </tr>
-              <tr style="border-bottom:1px solid var(--border)">
-                <td style="padding:0.6rem 0.75rem"><a href="https://github.com/kunchenguid/tasks-axi" target="_blank"><strong>tasks-axi</strong></a></td>
-                <td style="padding:0.6rem 0.75rem">Task and backlog manager for agents. Edits a human-readable <code>backlog.md</code> in place at near-zero output-token cost — no markdown regeneration through the model</td>
-              </tr>
-              <tr>
-                <td style="padding:0.6rem 0.75rem"><a href="https://github.com/kunchenguid/chrome-devtools-axi" target="_blank"><strong>chrome-devtools-axi</strong></a></td>
-                <td style="padding:0.6rem 0.75rem">Browser automation for agents. Wraps chrome-devtools-mcp with AXI output — 57% fewer input tokens and 26% lower cost vs raw MCP. Agents load it automatically when a task needs a real browser</td>
-              </tr>
-            </tbody>
-          </table>
+          <!-- treehouse -->
+          <h4 style="margin-top:1.5rem;margin-bottom:0.4rem"><a href="https://github.com/kunchenguid/treehouse" target="_blank">treehouse</a> — reusable isolated git worktree pool</h4>
+          <p style="margin-bottom:0.5rem;font-size:0.93rem">Each crewmate gets its own clean worktree instantly, with dependencies and build cache intact across tasks.</p>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">install</span>
+              <button class="term-copy" data-copy="curl -fsSL https://kunchenguid.github.io/treehouse/install.sh | sh">Copy</button>
+            </div>
+            <div class="term-body"><span class="prompt">➜</span> <span class="cmd">curl -fsSL https://kunchenguid.github.io/treehouse/install.sh | sh</span></div>
+          </div>
+          <p style="margin-top:0.75rem;margin-bottom:0.5rem;font-size:0.93rem">Usage — run inside any repo to drop into an isolated worktree subshell:</p>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">usage</span>
+              <button class="term-copy" data-copy="cd ~/your-project && treehouse">Copy</button>
+            </div>
+            <div class="term-body"><span class="prompt">➜</span> <span class="cmd">cd ~/your-project && treehouse</span>
+<span class="out">🌳 Entered worktree at ~/.treehouse/myproject-a1b2c3/1/myproject. Type 'exit' to return.</span>
+<span class="cmt"># run your agent or do work here — fully isolated from main checkout</span>
+<span class="prompt">➜</span> <span class="cmd">exit</span>
+<span class="out">🌳 Worktree returned to pool.</span></div>
+          </div>
 
-          <p style="margin-top:1rem">When you first launch firstmate and it detects these are missing, select <strong>Install all (Recommended)</strong> to install the full toolchain in one step.</p>
+          <!-- gh-axi -->
+          <h4 style="margin-top:1.5rem;margin-bottom:0.4rem"><a href="https://github.com/kunchenguid/gh-axi" target="_blank">gh-axi</a> — token-efficient GitHub CLI for agents</h4>
+          <p style="margin-bottom:0.5rem;font-size:0.93rem">Wraps <code>gh</code> with TOON output and contextual hints. 100% task success vs 86% for raw <code>gh</code>. Installed as a skill — agents load it automatically for GitHub tasks.</p>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">install skill</span>
+              <button class="term-copy" data-copy="npx skills add kunchenguid/gh-axi --skill gh-axi -g">Copy</button>
+            </div>
+            <div class="term-body"><span class="prompt">➜</span> <span class="cmd">npx skills add kunchenguid/gh-axi --skill gh-axi -g</span>
+<span class="cmt"># -g installs globally (~/.claude/skills/) for all projects</span></div>
+          </div>
+          <p style="margin-top:0.75rem;margin-bottom:0.5rem;font-size:0.93rem">Agents use it automatically. You can also run it directly:</p>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">usage</span>
+              <button class="term-copy" data-copy="npx -y gh-axi pr list">Copy</button>
+            </div>
+            <div class="term-body"><span class="prompt">➜</span> <span class="cmd">npx -y gh-axi pr list</span>
+<span class="out">prs[2]{number,title,state,author}:
+  42,fix flaky login test,open,fm-crewmate-k3
+  41,add dark mode,merged,fm-crewmate-p7</span></div>
+          </div>
+
+          <!-- tasks-axi -->
+          <h4 style="margin-top:1.5rem;margin-bottom:0.4rem"><a href="https://github.com/kunchenguid/tasks-axi" target="_blank">tasks-axi</a> — agent backlog manager</h4>
+          <p style="margin-bottom:0.5rem;font-size:0.93rem">Edits a human-readable <code>backlog.md</code> in place at near-zero output-token cost. Agents load it automatically for task and backlog work.</p>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">install skill</span>
+              <button class="term-copy" data-copy="npx skills add kunchenguid/tasks-axi --skill tasks-axi -g">Copy</button>
+            </div>
+            <div class="term-body"><span class="prompt">➜</span> <span class="cmd">npx skills add kunchenguid/tasks-axi --skill tasks-axi -g</span></div>
+          </div>
+          <p style="margin-top:0.75rem;margin-bottom:0.5rem;font-size:0.93rem">View the current backlog dashboard:</p>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">usage</span>
+              <button class="term-copy" data-copy="npx -y tasks-axi">Copy</button>
+            </div>
+            <div class="term-body"><span class="prompt">➜</span> <span class="cmd">npx -y tasks-axi</span>
+<span class="out">summary:
+  queued: 14  ready: 13
+in_flight[1]{id,title,kind}:
+  fm-task-k3,fix flaky login test,ship</span></div>
+          </div>
+
+          <!-- chrome-devtools-axi -->
+          <h4 style="margin-top:1.5rem;margin-bottom:0.4rem"><a href="https://github.com/kunchenguid/chrome-devtools-axi" target="_blank">chrome-devtools-axi</a> — browser automation for agents</h4>
+          <p style="margin-bottom:0.5rem;font-size:0.93rem">Wraps chrome-devtools-mcp with AXI output — 57% fewer tokens vs raw MCP. Agents load it automatically when a task needs a real browser.</p>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">install skill</span>
+              <button class="term-copy" data-copy="npx skills add kunchenguid/chrome-devtools-axi --skill chrome-devtools-axi -g">Copy</button>
+            </div>
+            <div class="term-body"><span class="prompt">➜</span> <span class="cmd">npx skills add kunchenguid/chrome-devtools-axi --skill chrome-devtools-axi -g</span></div>
+          </div>
+          <p style="margin-top:0.75rem;margin-bottom:0.5rem;font-size:0.93rem">Agents use it automatically. Direct usage:</p>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">usage</span>
+              <button class="term-copy" data-copy="npx -y chrome-devtools-axi open https://example.com">Copy</button>
+            </div>
+            <div class="term-body"><span class="prompt">➜</span> <span class="cmd">npx -y chrome-devtools-axi open https://example.com</span>
+<span class="out">page: {title: "Example Domain", url: "https://example.com"}
+snapshot:
+  heading "Example Domain"
+  paragraph "This domain is for use in illustrative examples..."
+  uid=g1:1 link "More information..."
+help[1]:
+  Run `chrome-devtools-axi click @g1:1` to click the link</span></div>
+          </div>
         </div>
       </div>
 
