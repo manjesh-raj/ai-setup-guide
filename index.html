@@ -2258,18 +2258,22 @@ clean PR, opened for you</span></div>
         <div class="step-index">01</div>
         <div class="step-body">
           <h3>Prerequisites</h3>
-          <p>Firstmate is not a binary — it is a git repo that you run Claude Code inside. Requirements already met from this guide:</p>
+          <p>Firstmate is not a binary — it is a git repo that you run Claude Code inside. All requirements are already met from earlier panels in this guide:</p>
           <ul>
-            <li>tmux (Terminal Setup panel)</li>
-            <li>Claude Code (Claude Code panel)</li>
-            <li>GitHub CLI with auth (used for no-mistakes init)</li>
+            <li>tmux — Terminal Setup panel</li>
+            <li>Claude Code — Claude Code panel</li>
+            <li>GitHub CLI authenticated — used for no-mistakes init</li>
           </ul>
+          <p style="margin-top:1rem">Firstmate also needs four companion tools from the <a href="https://axi.md" target="_blank">AXI ecosystem</a>. On first launch it detects what is missing and prompts you — select <strong>Install all (Recommended)</strong>. Steps 02–05 below show what each tool does and how to install manually if needed.</p>
+        </div>
+      </div>
 
-          <p style="margin-top:1.25rem">Firstmate also needs four companion tools from the <a href="https://axi.md" target="_blank">AXI ecosystem</a>. On first launch, firstmate detects what is missing and offers to install them — select <strong>Install all (Recommended)</strong>. To install manually:</p>
-
-          <!-- treehouse -->
-          <h4 style="margin-top:1.5rem;margin-bottom:0.4rem"><a href="https://github.com/kunchenguid/treehouse" target="_blank">treehouse</a> — reusable isolated git worktree pool</h4>
-          <p style="margin-bottom:0.5rem;font-size:0.93rem">Each crewmate gets its own clean worktree instantly, with dependencies and build cache intact across tasks.</p>
+      <!-- Step 2 -->
+      <div class="step">
+        <div class="step-index">02</div>
+        <div class="step-body">
+          <h3>Install treehouse — git worktree pool</h3>
+          <p>Each crewmate gets its own isolated git worktree with dependencies and build cache intact. No re-cloning between tasks, no parallel work conflicts.</p>
           <div class="term">
             <div class="term-bar">
               <div class="term-btn"></div>
@@ -2278,7 +2282,7 @@ clean PR, opened for you</span></div>
             </div>
             <div class="term-body"><span class="prompt">➜</span> <span class="cmd">curl -fsSL https://kunchenguid.github.io/treehouse/install.sh | sh</span></div>
           </div>
-          <p style="margin-top:0.75rem;margin-bottom:0.5rem;font-size:0.93rem">Usage — run inside any repo to drop into an isolated worktree subshell:</p>
+          <p style="margin-top:1rem">Drop into an isolated worktree for any repo — type <code>exit</code> to return and release it back to the pool:</p>
           <div class="term">
             <div class="term-bar">
               <div class="term-btn"></div>
@@ -2291,10 +2295,15 @@ clean PR, opened for you</span></div>
 <span class="prompt">➜</span> <span class="cmd">exit</span>
 <span class="out">🌳 Worktree returned to pool.</span></div>
           </div>
+        </div>
+      </div>
 
-          <!-- gh-axi -->
-          <h4 style="margin-top:1.5rem;margin-bottom:0.4rem"><a href="https://github.com/kunchenguid/gh-axi" target="_blank">gh-axi</a> — token-efficient GitHub CLI for agents</h4>
-          <p style="margin-bottom:0.5rem;font-size:0.93rem">Wraps <code>gh</code> with TOON output and contextual hints. 100% task success vs 86% for raw <code>gh</code>. Installed as a skill — agents load it automatically for GitHub tasks.</p>
+      <!-- Step 3 -->
+      <div class="step">
+        <div class="step-index">03</div>
+        <div class="step-body">
+          <h3>Install gh-axi — GitHub CLI for agents</h3>
+          <p>Wraps <code>gh</code> with token-efficient TOON output and contextual next-step hints. Benchmark: 100% task success vs 86% for raw <code>gh</code>, at lower cost. Installed as a skill — agents load it automatically for any GitHub task.</p>
           <div class="term">
             <div class="term-bar">
               <div class="term-btn"></div>
@@ -2302,9 +2311,9 @@ clean PR, opened for you</span></div>
               <button class="term-copy" data-copy="npx skills add kunchenguid/gh-axi --skill gh-axi -g">Copy</button>
             </div>
             <div class="term-body"><span class="prompt">➜</span> <span class="cmd">npx skills add kunchenguid/gh-axi --skill gh-axi -g</span>
-<span class="cmt"># -g installs globally (~/.claude/skills/) for all projects</span></div>
+<span class="cmt"># -g installs globally in ~/.claude/skills/ for all projects</span></div>
           </div>
-          <p style="margin-top:0.75rem;margin-bottom:0.5rem;font-size:0.93rem">Agents use it automatically. You can also run it directly:</p>
+          <p style="margin-top:1rem">Agents use it automatically. You can also call it directly:</p>
           <div class="term">
             <div class="term-bar">
               <div class="term-btn"></div>
@@ -2316,10 +2325,15 @@ clean PR, opened for you</span></div>
   42,fix flaky login test,open,fm-crewmate-k3
   41,add dark mode,merged,fm-crewmate-p7</span></div>
           </div>
+        </div>
+      </div>
 
-          <!-- tasks-axi -->
-          <h4 style="margin-top:1.5rem;margin-bottom:0.4rem"><a href="https://github.com/kunchenguid/tasks-axi" target="_blank">tasks-axi</a> — agent backlog manager</h4>
-          <p style="margin-bottom:0.5rem;font-size:0.93rem">Edits a human-readable <code>backlog.md</code> in place at near-zero output-token cost. Agents load it automatically for task and backlog work.</p>
+      <!-- Step 4 -->
+      <div class="step">
+        <div class="step-index">04</div>
+        <div class="step-body">
+          <h3>Install tasks-axi — backlog manager for agents</h3>
+          <p>Edits a human-readable <code>backlog.md</code> in place at near-zero output-token cost. No markdown regeneration through the model — agents load it automatically for any task or backlog work.</p>
           <div class="term">
             <div class="term-bar">
               <div class="term-btn"></div>
@@ -2328,7 +2342,7 @@ clean PR, opened for you</span></div>
             </div>
             <div class="term-body"><span class="prompt">➜</span> <span class="cmd">npx skills add kunchenguid/tasks-axi --skill tasks-axi -g</span></div>
           </div>
-          <p style="margin-top:0.75rem;margin-bottom:0.5rem;font-size:0.93rem">View the current backlog dashboard:</p>
+          <p style="margin-top:1rem">View the current backlog dashboard:</p>
           <div class="term">
             <div class="term-bar">
               <div class="term-btn"></div>
@@ -2341,10 +2355,15 @@ clean PR, opened for you</span></div>
 in_flight[1]{id,title,kind}:
   fm-task-k3,fix flaky login test,ship</span></div>
           </div>
+        </div>
+      </div>
 
-          <!-- chrome-devtools-axi -->
-          <h4 style="margin-top:1.5rem;margin-bottom:0.4rem"><a href="https://github.com/kunchenguid/chrome-devtools-axi" target="_blank">chrome-devtools-axi</a> — browser automation for agents</h4>
-          <p style="margin-bottom:0.5rem;font-size:0.93rem">Wraps chrome-devtools-mcp with AXI output — 57% fewer tokens vs raw MCP. Agents load it automatically when a task needs a real browser.</p>
+      <!-- Step 5 -->
+      <div class="step">
+        <div class="step-index">05</div>
+        <div class="step-body">
+          <h3>Install chrome-devtools-axi — browser automation for agents</h3>
+          <p>Wraps chrome-devtools-mcp with AXI output — 57% fewer input tokens and 26% lower cost vs raw MCP. Agents load it automatically when a task needs a real browser.</p>
           <div class="term">
             <div class="term-bar">
               <div class="term-btn"></div>
@@ -2353,7 +2372,7 @@ in_flight[1]{id,title,kind}:
             </div>
             <div class="term-body"><span class="prompt">➜</span> <span class="cmd">npx skills add kunchenguid/chrome-devtools-axi --skill chrome-devtools-axi -g</span></div>
           </div>
-          <p style="margin-top:0.75rem;margin-bottom:0.5rem;font-size:0.93rem">Agents use it automatically. Direct usage:</p>
+          <p style="margin-top:1rem">Agents use it automatically. Direct usage:</p>
           <div class="term">
             <div class="term-bar">
               <div class="term-btn"></div>
@@ -2364,7 +2383,6 @@ in_flight[1]{id,title,kind}:
 <span class="out">page: {title: "Example Domain", url: "https://example.com"}
 snapshot:
   heading "Example Domain"
-  paragraph "This domain is for use in illustrative examples..."
   uid=g1:1 link "More information..."
 help[1]:
   Run `chrome-devtools-axi click @g1:1` to click the link</span></div>
@@ -2372,9 +2390,9 @@ help[1]:
         </div>
       </div>
 
-      <!-- Step 2 -->
+      <!-- Step 6 -->
       <div class="step">
-        <div class="step-index">02</div>
+        <div class="step-index">06</div>
         <div class="step-body">
           <h3>Clone the repo</h3>
           <p>Clone once to a permanent home. The repo itself is the orchestrator — do not delete it between sessions.</p>
@@ -2387,16 +2405,16 @@ help[1]:
             <div class="term-body"><span class="prompt">➜</span> <span class="cmd">git clone https://github.com/kunchenguid/firstmate ~/manjesh/firstmate</span>
 <span class="out">Cloning into '/Users/you/manjesh/firstmate'...</span></div>
           </div>
-          <p style="margin-top:1rem">Already cloned at <code>~/manjesh/firstmate</code> pointing to <a href="https://github.com/manjesh-raj/firstmate" target="_blank">manjesh-raj/firstmate</a> (backup fork).</p>
+          <p style="margin-top:1rem">Already cloned at <code>~/manjesh/firstmate</code> — pointing to <a href="https://github.com/manjesh-raj/firstmate" target="_blank">manjesh-raj/firstmate</a> (backup fork).</p>
         </div>
       </div>
 
-      <!-- Step 3 -->
+      <!-- Step 7 -->
       <div class="step">
-        <div class="step-index">03</div>
+        <div class="step-index">07</div>
         <div class="step-body">
           <h3>Launch firstmate</h3>
-          <p>Always launch from inside a tmux session so crewmate windows land in your visible session. Start tmux, then cd into the firstmate repo and run Claude Code — <code>AGENTS.md</code> takes over automatically.</p>
+          <p>Always launch from inside a tmux session so crewmate windows land in your visible session. Then cd into the firstmate repo and run Claude Code — <code>AGENTS.md</code> takes over automatically.</p>
           <div class="term">
             <div class="term-bar">
               <div class="term-btn"></div>
@@ -2409,53 +2427,32 @@ help[1]:
         </div>
       </div>
 
-      <!-- Step 4 -->
+      <!-- Step 8 -->
       <div class="step">
-        <div class="step-index">04</div>
+        <div class="step-index">08</div>
         <div class="step-body">
           <h3>Give orders — firstmate dispatches the crew</h3>
-          <p>You talk only to the first mate. It spawns crewmates in their own tmux windows and git worktrees, supervises them, and reports back when done.</p>
+          <p>You talk only to firstmate. It spawns crewmates in their own tmux windows and git worktrees, supervises them, and reports back when done.</p>
           <div class="term">
             <div class="term-bar">
               <div class="term-btn"></div>
               <span class="term-label">firstmate</span>
             </div>
-            <div class="term-body"><span class="prompt">></span> <span class="cmd">ahoy! look at my github project xyz, fix the flaky login test and add dark mode</span>
+            <div class="term-body"><span class="prompt">></span> <span class="cmd">fix the flaky login test in sre_sentinel and investigate why deploys are slow</span>
 
-<span class="out">  Spawning fm-fix-login-k3  (ship task)
-  Spawning fm-dark-mode-p7  (ship task)
+<span class="out">  Spawning fm-fix-login-k3  (ship task → sre_sentinel)
+  Spawning fm-deploy-scout-p7  (scout task → deploy_engine)
 
-  PR ready for review, captain: https://github.com/you/xyz/pull/42
-  (fix flaky login test — risk: low — CI green)</span>
-
-<span class="prompt">></span> <span class="cmd">alright merge it</span></div>
+  PR ready for review, captain: https://bitbucket.org/pramata/sre_sentinel/pull-requests/42
+  Report at data/fm-deploy-scout-p7/report.md</span></div>
           </div>
-
-          <p style="margin-top:1rem">Two task shapes:</p>
-          <table style="width:100%;border-collapse:collapse;font-size:0.92rem;margin-top:0.5rem">
-            <thead>
-              <tr style="border-bottom:1px solid var(--border)">
-                <th style="text-align:left;padding:0.5rem 0.75rem;font-weight:600;color:var(--subtle)">Shape</th>
-                <th style="text-align:left;padding:0.5rem 0.75rem;font-weight:600;color:var(--subtle)">What it does</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr style="border-bottom:1px solid var(--border)">
-                <td style="padding:0.6rem 0.75rem"><strong>ship</strong></td>
-                <td style="padding:0.6rem 0.75rem">Makes a code change — delivers a PR or local merge for your approval</td>
-              </tr>
-              <tr>
-                <td style="padding:0.6rem 0.75rem"><strong>scout</strong></td>
-                <td style="padding:0.6rem 0.75rem">Investigates, plans, audits, or reproduces — leaves a report at <code>data/&lt;id&gt;/report.md</code></td>
-              </tr>
-            </tbody>
-          </table>
+          <p style="margin-top:1rem">Two task shapes — <strong>ship</strong> delivers a code change (PR or local merge), <strong>scout</strong> investigates and leaves a report at <code>data/&lt;id&gt;/report.md</code>.</p>
         </div>
       </div>
 
-      <!-- Step 5 -->
+      <!-- Step 9 -->
       <div class="step">
-        <div class="step-index">05</div>
+        <div class="step-index">09</div>
         <div class="step-body">
           <h3>Built-in skills</h3>
           <table style="width:100%;border-collapse:collapse;font-size:0.92rem;margin-top:0.5rem">
@@ -2468,7 +2465,7 @@ help[1]:
             <tbody>
               <tr style="border-bottom:1px solid var(--border)">
                 <td style="padding:0.6rem 0.75rem"><code>/afk</code></td>
-                <td style="padding:0.6rem 0.75rem">Away mode — sub-supervisor handles routine events, escalates only what needs you as a batched digest</td>
+                <td style="padding:0.6rem 0.75rem">Away mode — sub-supervisor self-handles routine events, escalates only what needs you as a batched digest</td>
               </tr>
               <tr style="border-bottom:1px solid var(--border)">
                 <td style="padding:0.6rem 0.75rem"><code>/updatefirstmate</code></td>
@@ -2483,9 +2480,9 @@ help[1]:
         </div>
       </div>
 
-      <!-- Step 6 -->
+      <!-- Step 10 -->
       <div class="step">
-        <div class="step-index">06</div>
+        <div class="step-index">10</div>
         <div class="step-body">
           <h3>References</h3>
           <ul>
