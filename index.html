@@ -645,6 +645,9 @@
       <li class="nav-item" data-target="no-mistakes">
         <button type="button"><span class="nav-icon">⛨</span> No Mistakes</button>
       </li>
+      <li class="nav-item" data-target="firstmate">
+        <button type="button"><span class="nav-icon">⚓</span> Firstmate</button>
+      </li>
     </ul>
 
     <div class="sidebar-footer">
@@ -2239,6 +2242,150 @@ clean PR, opened for you</span></div>
             <li><a href="https://kunchenguid.github.io/no-mistakes/" target="_blank">Full documentation - kunchenguid.github.io/no-mistakes</a></li>
             <li><a href="https://github.com/kunchenguid/no-mistakes" target="_blank">Upstream - github.com/kunchenguid/no-mistakes</a></li>
             <li><a href="https://github.com/manjesh-raj/no-mistakes" target="_blank">Backup fork - github.com/manjesh-raj/no-mistakes</a></li>
+          </ul>
+        </div>
+      </div>
+
+    <section class="panel" id="panel-firstmate">
+      <div class="eyebrow">Agentic Tooling</div>
+      <h1>Firstmate</h1>
+      <p class="lede">Talk to one agent, ship with a crew. Firstmate turns Claude Code into a fleet orchestrator — you give instructions to a single "first mate" agent, which spawns autonomous crewmates in isolated tmux windows and git worktrees, supervises them to completion, and hands you finished PRs or investigation reports.</p>
+
+      <!-- Step 1 -->
+      <div class="step">
+        <div class="step-index">01</div>
+        <div class="step-body">
+          <h3>Prerequisites</h3>
+          <p>Firstmate is not a binary — it is a git repo that you run Claude Code inside. Requirements already met from this guide:</p>
+          <ul>
+            <li>tmux (Terminal Setup panel)</li>
+            <li>Claude Code (Claude Code panel)</li>
+            <li>GitHub CLI with auth (used for no-mistakes init)</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step">
+        <div class="step-index">02</div>
+        <div class="step-body">
+          <h3>Clone the repo</h3>
+          <p>Clone once to a permanent home. The repo itself is the orchestrator — do not delete it between sessions.</p>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">zsh</span>
+              <button class="term-copy" data-copy="git clone https://github.com/kunchenguid/firstmate ~/manjesh/firstmate">Copy</button>
+            </div>
+            <div class="term-body"><span class="prompt">➜</span> <span class="cmd">git clone https://github.com/kunchenguid/firstmate ~/manjesh/firstmate</span>
+<span class="out">Cloning into '/Users/you/manjesh/firstmate'...</span></div>
+          </div>
+          <p style="margin-top:1rem">Already cloned at <code>~/manjesh/firstmate</code> pointing to <a href="https://github.com/manjesh-raj/firstmate" target="_blank">manjesh-raj/firstmate</a> (backup fork).</p>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step">
+        <div class="step-index">03</div>
+        <div class="step-body">
+          <h3>Launch firstmate</h3>
+          <p>Always launch from inside a tmux session so crewmate windows land in your visible session. Start tmux, then cd into the firstmate repo and run Claude Code — <code>AGENTS.md</code> takes over automatically.</p>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">zsh</span>
+              <button class="term-copy" data-copy="cd ~/manjesh/firstmate && claude">Copy</button>
+            </div>
+            <div class="term-body"><span class="prompt">➜</span> <span class="cmd">cd ~/manjesh/firstmate && claude</span>
+<span class="out">  ⚓ firstmate ready — talk to me, captain</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="step">
+        <div class="step-index">04</div>
+        <div class="step-body">
+          <h3>Give orders — firstmate dispatches the crew</h3>
+          <p>You talk only to the first mate. It spawns crewmates in their own tmux windows and git worktrees, supervises them, and reports back when done.</p>
+          <div class="term">
+            <div class="term-bar">
+              <div class="term-btn"></div>
+              <span class="term-label">firstmate</span>
+            </div>
+            <div class="term-body"><span class="prompt">></span> <span class="cmd">ahoy! look at my github project xyz, fix the flaky login test and add dark mode</span>
+
+<span class="out">  Spawning fm-fix-login-k3  (ship task)
+  Spawning fm-dark-mode-p7  (ship task)
+
+  PR ready for review, captain: https://github.com/you/xyz/pull/42
+  (fix flaky login test — risk: low — CI green)</span>
+
+<span class="prompt">></span> <span class="cmd">alright merge it</span></div>
+          </div>
+
+          <p style="margin-top:1rem">Two task shapes:</p>
+          <table style="width:100%;border-collapse:collapse;font-size:0.92rem;margin-top:0.5rem">
+            <thead>
+              <tr style="border-bottom:1px solid var(--border)">
+                <th style="text-align:left;padding:0.5rem 0.75rem;font-weight:600;color:var(--subtle)">Shape</th>
+                <th style="text-align:left;padding:0.5rem 0.75rem;font-weight:600;color:var(--subtle)">What it does</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom:1px solid var(--border)">
+                <td style="padding:0.6rem 0.75rem"><strong>ship</strong></td>
+                <td style="padding:0.6rem 0.75rem">Makes a code change — delivers a PR or local merge for your approval</td>
+              </tr>
+              <tr>
+                <td style="padding:0.6rem 0.75rem"><strong>scout</strong></td>
+                <td style="padding:0.6rem 0.75rem">Investigates, plans, audits, or reproduces — leaves a report at <code>data/&lt;id&gt;/report.md</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="step">
+        <div class="step-index">05</div>
+        <div class="step-body">
+          <h3>Built-in skills</h3>
+          <table style="width:100%;border-collapse:collapse;font-size:0.92rem;margin-top:0.5rem">
+            <thead>
+              <tr style="border-bottom:1px solid var(--border)">
+                <th style="text-align:left;padding:0.5rem 0.75rem;font-weight:600;color:var(--subtle)">Skill</th>
+                <th style="text-align:left;padding:0.5rem 0.75rem;font-weight:600;color:var(--subtle)">What it does</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom:1px solid var(--border)">
+                <td style="padding:0.6rem 0.75rem"><code>/afk</code></td>
+                <td style="padding:0.6rem 0.75rem">Away mode — sub-supervisor handles routine events, escalates only what needs you as a batched digest</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border)">
+                <td style="padding:0.6rem 0.75rem"><code>/updatefirstmate</code></td>
+                <td style="padding:0.6rem 0.75rem">Self-update firstmate and all secondmates to latest from origin, then re-read instructions</td>
+              </tr>
+              <tr>
+                <td style="padding:0.6rem 0.75rem"><code>/stow</code></td>
+                <td style="padding:0.6rem 0.75rem">Sweep session for uncaptured knowledge, route to disk, file undone steps to backlog — safe to reset after</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Step 6 -->
+      <div class="step">
+        <div class="step-index">06</div>
+        <div class="step-body">
+          <h3>References</h3>
+          <ul>
+            <li><a href="https://github.com/kunchenguid/firstmate" target="_blank">Upstream - github.com/kunchenguid/firstmate</a></li>
+            <li><a href="https://github.com/manjesh-raj/firstmate" target="_blank">Backup fork - github.com/manjesh-raj/firstmate</a></li>
+            <li><a href="https://github.com/kunchenguid/firstmate/blob/main/docs/architecture.md" target="_blank">Architecture docs</a></li>
+            <li><a href="https://github.com/kunchenguid/firstmate/blob/main/docs/configuration.md" target="_blank">Configuration docs</a></li>
           </ul>
         </div>
       </div>
