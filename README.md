@@ -17,6 +17,7 @@ Personal forks kept as backups in case upstream repos are removed or change:
 | [lavish-axi](https://github.com/kunchenguid/lavish-axi) | [manjesh-raj/lavish-axi](https://github.com/manjesh-raj/lavish-axi) | HTML artifact review tool — serve, annotate, and export HTML artifacts locally |
 | [skills](https://github.com/anthropics/skills) | [manjesh-raj/skills](https://github.com/manjesh-raj/skills) | Anthropic skill definitions and templates for Claude Code |
 | [OpenSuperWhisper](https://github.com/starmel/OpenSuperWhisper) | [manjesh-raj/OpenSuperWhisper](https://github.com/manjesh-raj/OpenSuperWhisper) | macOS voice dictation app for recording prompts hands-free |
+| [no-mistakes](https://github.com/kunchenguid/no-mistakes) | [manjesh-raj/no-mistakes](https://github.com/manjesh-raj/no-mistakes) | Git proxy that gates pushes through an AI review-test-lint pipeline before opening a clean PR |
 
 ## Based on
 

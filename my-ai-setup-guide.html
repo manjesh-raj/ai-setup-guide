@@ -642,6 +642,9 @@
       <li class="nav-item" data-target="lavish">
         <button type="button"><span class="nav-icon">◈</span> Lavish</button>
       </li>
+      <li class="nav-item" data-target="no-mistakes">
+        <button type="button"><span class="nav-icon">⛨</span> No Mistakes</button>
+      </li>
     </ul>
 
     <div class="sidebar-footer">
@@ -2081,6 +2084,129 @@ Only skip lavish if Manjesh explicitly asks for a Markdown file or says
           <div class="term-body" style="font-size:12px;"><span class="prompt">➜</span> <span class="cmd">lavish-axi plan.html</span><span class="cursor"></span></div>
         </div>
       </div>
+    </section>
+
+    <section class="panel" id="panel-no-mistakes">
+      <div class="eyebrow">Agentic Tooling</div>
+      <h1>No Mistakes</h1>
+      <p class="lede">A local git proxy that sits in front of your real remote. Push to <code>no-mistakes</code> instead of <code>origin</code> and it runs an AI-driven review-test-lint pipeline in a disposable worktree, then opens a clean PR only after every check passes. Nothing reaches the real remote until the gate is green.</p>
+
+      <!-- Step 1 -->
+      <div class="step">
+        <div class="step-index">01</div>
+        <div class="step-body">
+          <h3>Install no-mistakes</h3>
+          <p>One-line installer. Puts the binary at <code>~/.local/bin/no-mistakes</code> and symlinks it from <code>~/.no-mistakes/bin/</code>.</p>
+          <div class="term-block">
+            <div class="term-header">
+              <span class="term-title">Install</span>
+              <button class="term-copy" data-copy="curl -fsSL https://raw.githubusercontent.com/kunchenguid/no-mistakes/main/docs/install.sh | sh">Copy</button>
+            </div>
+            <pre class="term-body">curl -fsSL https://raw.githubusercontent.com/kunchenguid/no-mistakes/main/docs/install.sh | sh</pre>
+          </div>
+          <p>Verify:</p>
+          <div class="term-block">
+            <div class="term-header">
+              <span class="term-title">Verify</span>
+              <button class="term-copy" data-copy="no-mistakes --version">Copy</button>
+            </div>
+            <pre class="term-body">no-mistakes --version</pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step">
+        <div class="step-index">02</div>
+        <div class="step-body">
+          <h3>Initialize a repo (per project)</h3>
+          <p>Run this once per repo you want to gate. It adds a <code>no-mistakes</code> git remote pointing to a local bare repo, and installs the <code>/no-mistakes</code> skill for Claude Code at user level.</p>
+          <div class="term-block">
+            <div class="term-header">
+              <span class="term-title">Init</span>
+              <button class="term-copy" data-copy="cd ~/your-project && no-mistakes init">Copy</button>
+            </div>
+            <pre class="term-body">cd ~/your-project && no-mistakes init</pre>
+          </div>
+          <p>For repos where you work on a fork (you push to your fork, PR goes to upstream), add the fork flag:</p>
+          <div class="term-block">
+            <div class="term-header">
+              <span class="term-title">Fork init</span>
+              <button class="term-copy" data-copy="no-mistakes init --fork-url git@github.com:manjesh-raj/repo-name.git">Copy</button>
+            </div>
+            <pre class="term-body">no-mistakes init --fork-url git@github.com:manjesh-raj/repo-name.git</pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step">
+        <div class="step-index">03</div>
+        <div class="step-body">
+          <h3>Three ways to trigger the gate</h3>
+          <table style="width:100%;border-collapse:collapse;font-size:0.92rem;">
+            <thead>
+              <tr style="border-bottom:1px solid var(--border)">
+                <th style="text-align:left;padding:0.5rem 0.75rem;font-weight:600">Command</th>
+                <th style="text-align:left;padding:0.5rem 0.75rem;font-weight:600">When to use</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom:1px solid var(--border)">
+                <td style="padding:0.5rem 0.75rem"><code>git push no-mistakes</code></td>
+                <td style="padding:0.5rem 0.75rem">You already have a committed branch — push it through the gate instead of origin</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border)">
+                <td style="padding:0.5rem 0.75rem"><code>no-mistakes</code></td>
+                <td style="padding:0.5rem 0.75rem">Opens the TUI — wizard commits, pushes through the gate, then shows findings. Use <code>no-mistakes -y</code> to skip wizard prompts</td>
+              </tr>
+              <tr>
+                <td style="padding:0.5rem 0.75rem"><code>/no-mistakes &lt;task&gt;</code></td>
+                <td style="padding:0.5rem 0.75rem">Agent skill — tell Claude Code to do a task and gate it, or gate existing committed work with bare <code>/no-mistakes</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="step">
+        <div class="step-index">04</div>
+        <div class="step-body">
+          <h3>How the pipeline works</h3>
+          <p>Every push through the gate runs through the same pipeline in an isolated worktree — your working tree is never touched while the pipeline is running.</p>
+          <div class="term-block">
+            <div class="term-header">
+              <span class="term-title">Pipeline</span>
+            </div>
+            <pre class="term-body">your branch
+    │  git push no-mistakes
+    ▼
+┌──────────────────────────────────────────────┐
+│  disposable worktree — your work stays put     │
+│  review → test → docs → lint → push → PR → CI  │
+└──────────────────────────────────────────────┘
+    │  every check green
+    ▼
+clean PR, opened for you</pre>
+          </div>
+          <p>Each step produces a <strong>finding</strong>. Safe mechanical fixes are applied automatically. Anything touching intent is escalated for you to <strong>approve</strong>, <strong>fix</strong>, or <strong>skip</strong>. Nothing reaches the real remote until every check is green.</p>
+        </div>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="step">
+        <div class="step-index">05</div>
+        <div class="step-body">
+          <h3>References</h3>
+          <ul>
+            <li><a href="https://kunchenguid.github.io/no-mistakes/" target="_blank">Full documentation - kunchenguid.github.io/no-mistakes</a></li>
+            <li><a href="https://github.com/kunchenguid/no-mistakes" target="_blank">Upstream - github.com/kunchenguid/no-mistakes</a></li>
+            <li><a href="https://github.com/manjesh-raj/no-mistakes" target="_blank">Backup fork - github.com/manjesh-raj/no-mistakes</a></li>
+          </ul>
+        </div>
+      </div>
+
     </section>
 
   </main>
